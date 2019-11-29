@@ -1,5 +1,26 @@
 #include "uls.h"
 
+
+
+void for_each_argv(int argc, char* argv[]) {
+    t_list *files = NULL;
+    t_list *dirs = NULL;
+    t_list *err = files_and_dirs(argc, argv, &files, &dirs);
+
+    mx_sort_list(err);
+    mx_sort_list(files);
+    mx_sort_list(dirs);
+    
+    print_errors(err);
+    if (dirs != NULL && files != NULL) {
+        print_standart(files);
+        mx_printchar('\n');
+    }
+    else
+        print_standart(files);
+    print_dirs(dirs, files);
+}
+
 static void print_one_dir(char *str) {
     mx_printstr(str);
     mx_printstr(":\n");
@@ -24,23 +45,4 @@ static void print_errors(t_list *list) {
         mx_printerr(i->data);
         mx_printerr("\n");
     }
-}
-
-void for_each_argv(int argc, char* argv[]) {
-    t_list *files = NULL;
-    t_list *dirs = NULL;
-    t_list *err = files_and_dirs(argc, argv, &files, &dirs);
-
-    mx_sort_list(err);
-    mx_sort_list(files);
-    mx_sort_list(dirs);
-    
-    print_errors(err);
-    if (dirs != NULL && files != NULL) {
-        print_standart(files);
-        mx_printchar('\n');
-    }
-    else
-        print_standart(files);
-    print_dirs(dirs, files);
 }

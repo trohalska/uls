@@ -32,8 +32,8 @@ int main(int argc, char **argv) {
 */	
 	if (argc < 2)
 		mx_if_no_argv();
-	// else if (mx_strcmp(argv[1], "-l") != 0)
-    //     for_each_argv(argc, argv);
+	else if (mx_strcmp(argv[1], "-l") != 0)
+        for_each_argv(argc, argv);
 	// else if (mx_strcmp(argv[1], "-l") == 0) {
 	// 	DIR *d = opendir(".");
 	// 	get_contents(d);
