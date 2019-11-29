@@ -3,19 +3,19 @@ NAME =		uls
 CFLAGS =	-std=c11 -Wall -Wextra -Werror -Wpedantic
 
 # --------- Header files ----------------
-INC =		libmx.h
+INC =		uls.h
 INCI =		$(addprefix inc/, 			\
-			libmx.h)
+			uls.h)
 
 # --------- Source files ----------------
 
-SRC = 		uls_main.c
+SRC = 		mx_check.c mx_if_no_argv.c mx_print_many_col.c mx_push_back_uls.c uls_main.c
 
 SRCS =  	$(addprefix src/,			\
-			uls_main.c )
+			mx_check.c mx_if_no_argv.c mx_print_many_col.c mx_push_back_uls.c uls_main.c )
 
 # --------- Object files ----------------
-OBJ = 		uls_main.o 
+OBJ = 		mx_check.o mx_if_no_argv.o mx_print_many_col.o mx_push_back_uls.o uls_main.o
 
 
 # ---------------------------------------
