@@ -29,7 +29,7 @@ typedef struct s_uls {
 
 void mx_check(int argc, char **argv);
 void mx_if_no_argv();
-void mx_print_many_col(t_uls *list);
+void mx_standart_print(DIR *dir);
 void mx_push_back_uls(t_uls **list, void *data, int len);
 
 

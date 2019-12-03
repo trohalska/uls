@@ -2,9 +2,7 @@
 
 static void mx_ls_wf(DIR *dir);
 
-void mx_if_no_argv() {
-    DIR *entry = opendir(".");
-    
+void mx_if_no_argv(DIR *entry) {
     if (isatty(1))
         mx_standart_print(entry);
     else

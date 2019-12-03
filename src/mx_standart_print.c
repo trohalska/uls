@@ -4,7 +4,6 @@ int get_maxlen_name(t_uls *list);
 int mx_get_uls_list_size(t_uls *list);
 char **get_filesnames(t_uls *list, int size);
 void print_filesnames(char **names, int size, int max, int rows);
-void print_spaces(int count);
 
 void mx_standart_print(DIR *dir) {
     struct dirent *entry = NULL;
@@ -67,7 +66,7 @@ void print_filesnames(char **names, int size, int max, int rows) {
             mx_printstr(names[i + j]);
             if (mx_strlen(names[i + j]) < max) {
                 if (i + j < size - rows)
-                    print_spaces(max - mx_strlen(names[i + j]));
+                    mx_printspaces(max - mx_strlen(names[i + j]));
             }
             else {
                 if (i + j < size - rows)
@@ -76,9 +75,4 @@ void print_filesnames(char **names, int size, int max, int rows) {
         }
         mx_printchar('\n');
     }
-}
-
-void print_spaces(int count) {
-    for (int i = 0; i <= count; i++)
-        mx_printchar(' ');
 }

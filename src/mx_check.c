@@ -18,3 +18,23 @@ void mx_check(int argc, char **argv) {
 	}
 
 }
+
+//DIR *dir;
+//dir = opendir(argv[1]);
+//struct dirent *entry1;
+
+// if (!dir) {
+// 	char *str =  mx_strjoin("uls:",argv[2]);
+// 	//mx_printstr(str);
+// 	perror(str);
+// 	exit(1);
+// }
+
+// if (!dir) {
+// 	mx_printerr("uls: ");
+// 	mx_printerr("dir");
+// 	mx_printerr(": ");
+// 	mx_printerr(strerror(errno));
+// 	mx_printerr("\n");
+// 	exit(1);
+// }

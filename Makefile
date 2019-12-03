@@ -9,13 +9,13 @@ INCI =		$(addprefix inc/, 			\
 
 # --------- Source files ----------------
 
-SRC = 		mx_check.c mx_if_no_argv.c mx_print_many_col.c mx_push_back_uls.c uls_main.c
+SRC = 		mx_check.c mx_if_no_argv.c mx_standart_print.c mx_push_back_uls.c uls_main.c
 
 SRCS =  	$(addprefix src/,			\
-			mx_check.c mx_if_no_argv.c mx_print_many_col.c mx_push_back_uls.c uls_main.c )
+			mx_check.c mx_if_no_argv.c mx_standart_print.c mx_push_back_uls.c uls_main.c )
 
 # --------- Object files ----------------
-OBJ = 		mx_check.o mx_if_no_argv.o mx_print_many_col.o mx_push_back_uls.o uls_main.o
+OBJ = 		mx_check.o mx_if_no_argv.o mx_standart_print.o mx_push_back_uls.o uls_main.o
 
 
 # ---------------------------------------
