@@ -57,7 +57,9 @@ void mx_push_back_uls(t_uls **list, void *data, int len);
 char *mx_get_flags(int argc, char **argv); // получаешь строку флагов
 char **mx_get_files(int argc, char **argv); // получаешь строку файлов
 t_file *mx_get_filesattr(char *filename);
-void print_long_format(t_file *file);
+t_list *mx_get_files_list(char **files);
+
+void mx_print_long_format(t_list *list_files);
 
 typedef enum e_flag { // 33 flags:
 minus,

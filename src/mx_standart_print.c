@@ -19,11 +19,11 @@ void mx_standart_print(DIR *dir) {
     filesnames = get_filesnames(list, count_names);
     struct winsize win;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-    cols = win.ws_col / (maxlencol + 1);
+    cols = win.ws_col / (maxlencol + 2);
     rows = count_names / cols;
     if (count_names % cols) 
         rows += 1;        
-    print_filesnames(filesnames, count_names, maxlencol, rows);
+    print_filesnames(filesnames, count_names, maxlencol + 1, rows);
     mx_del_strarr(&filesnames);
 }
 
@@ -70,7 +70,7 @@ void print_filesnames(char **names, int size, int max, int rows) {
             }
             else {
                 if (i + j < size - rows)
-                    mx_printchar(' ');
+                    mx_printstr(" ");
             }          
         }
         mx_printchar('\n');

@@ -1,18 +1,19 @@
 #include "uls.h"
 
-// static void print(t_file *file);
+static void print(t_file *file);
+//static void print_time(t_file *file);
 
-//      void mx_print_long_format(t_list *list_files) {
-//     t_length_file *length_file = mx_create_length_file(list_files);
+void mx_print_long_format(t_list *list_files) {
+    //t_length_file *length_file = mx_create_length_file(list_files);
 
-//     t_list *current = list_files;
-//     while (current) {
-//         print_file(current->data, length_file);
-//         current = current->next;
-//     }
-// }
+    t_list *q = list_files;
+    for (; q; q = q->next) {
+        //print_file(q->data, length_file);
+        print(q->data);
+    }
+}
 
-void print_long_format(t_file *file) {
+static void print(t_file *file) {
     mx_printstr(file->mode);
     mx_printstr(" ");    // mx_print_spaces(l_f->links_l - mx_numlen(file->links));
     mx_printint(file->links);
@@ -31,3 +32,12 @@ void print_long_format(t_file *file) {
     //mx_print_link(file);
     mx_printstr("\n");
 }
+
+// static void print_time(t_file *file) {
+//     mx_printstr("\n");
+//     mx_printstr(file->a_time);
+//     mx_printstr("\n");
+//     mx_printstr(file->m_time);
+//     mx_printstr("\n");
+//     mx_printstr(file->c_time);
+// }

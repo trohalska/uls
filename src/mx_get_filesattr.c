@@ -83,54 +83,22 @@ static void get_group(t_file *file, struct stat fs) {
 		file->group = mx_itoa(fs.st_gid);
 }
 
-// static void get_old_time(t_file *file, char *str, int length);
+static void mx_get_time_attr(t_file *file, struct stat fs) {  
+	char *str;
+    int len;
 
-// void mx_get_modified_time(t_file *file, struct stat file_stat) {
-//     char *str;
-//     int length_str;
+    str = ctime(&fs.st_mtime);
+    len = mx_strlen(str);
+	file->m_time = mx_strnew(len - 13);
+	file->m_time = mx_strncpy(file->m_time, str + 4, len - 13);
 
-//     file->d_modf_time = file_stat.st_mtime;
-//     str = ctime(&file_stat.st_mtime);
-//     length_str = mx_strlen(str);
-//     file->full_modf_time = mx_strdup(str);
-
-//     if (time(NULL) - file->d_modf_time < 31556926 / 2
-//             && ((time(NULL) - file->d_modf_time >= 0))) {
-//         file->modf_time = mx_strnew(length_str - 13);
-//         file->modf_time = mx_strncpy(file->modf_time,
-//                 str + 4, length_str - 13);
-//         return;
-//     }
-//     get_old_time(file, str, length_str);
-// }
-
-// static void get_old_time(t_file *file, char *str, int length) {
-//     int k = 0;
-
-//     file->modf_time = mx_strnew(length - 13);
-//     for (int i = 0; i < length - 1; i++) {
-//         if ((i > 3 && i < 11) || i > 19) {
-//             file->modf_time[k] = str[i];
-//             k++;
-//         }
-//         if (i == 11) {
-//             file->modf_time[k] = ' ';
-//             k++;
-//         }
-//     }
-// }
-
-static void mx_get_time_attr(t_file *file, struct stat fs) {
-    //get_m_time(file, fs);
+	str = ctime(&fs.st_atime);
+    len = mx_strlen(str);
+	file->a_time = mx_strnew(len - 13);
+	file->a_time = mx_strncpy(file->a_time, str + 4, len - 13);
 	
-	file->a_time = ctime(&fs.st_atime); // malloc?
-    file->m_time = ctime(&fs.st_mtime);
-    file->c_time = ctime(&fs.st_ctime);
+	str = ctime(&fs.st_ctime);
+    len = mx_strlen(str);
+	file->c_time = mx_strnew(len - 13);
+	file->c_time = mx_strncpy(file->c_time, str + 4, len - 13);
 }
-
-    // mx_get_modified_time(file, fs);
-    // mx_get_status_time(file, fs);
-    // mx_get_creation_time(file, fs);
-    // mx_get_access_time(file, fs);
-
-
