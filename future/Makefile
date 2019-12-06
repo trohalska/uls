@@ -9,20 +9,20 @@ INCI =		$(addprefix inc/, 			\
 
 # --------- Source files ----------------
 
-SRC = 		*.c
+SRC = 		mx_check.c mx_if_no_argv.c mx_standart_print.c mx_push_back_uls.c uls_main.c
 
 SRCS =  	$(addprefix src/,			\
-			*.c )
+			mx_check.c mx_if_no_argv.c mx_standart_print.c mx_push_back_uls.c uls_main.c )
 
 # --------- Object files ----------------
-OBJ = 		*.o
+OBJ = 		mx_check.o mx_if_no_argv.o mx_standart_print.o mx_push_back_uls.o uls_main.o
 
 
 # ---------------------------------------
 all: install clean
 
 install:
-	
+	@ make install -sC libmx/
 	@ cp $(SRCS) $(INCI) .
 	@ clang $(CFLAGS) -c $(SRC)
 	@ clang $(CFLAGS) $(OBJ) libmx/libmx.a -o $(NAME)
@@ -30,11 +30,11 @@ install:
 	@ mv $(OBJ) ./obj
 
 uninstall: clean
-	
+	@ make uninstall -sC libmx/
 	@ rm -rf $(NAME)
 
 clean: 
-	
+	@ make clean -sC libmx/
 	@ rm -rf $(INC) $(SRC) ./obj
 	
 reinstall: uninstall install

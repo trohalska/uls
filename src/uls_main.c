@@ -15,18 +15,13 @@ int main(int argc, char **argv) {
 /*  якщо аргументи є 
 */
 	if (argc >= 2) {
-		char *flags = mx_get_flags(argc, argv);
-		char **files = mx_get_files(argc, argv);
+		char *flags = mx_get_flags(argc, argv); // "lRaAGh@eT1CrtucS"
+		//char **files = mx_get_files(argc, argv);
+		if(flags[0] == 'l')
+			mx_print_all(argc, argv, flags);
 
-		// printf("flags = %s\n", flags);
-		// if (files != NULL) {
-		// 	int i = 0;
-		// 	for (; files[i] != NULL; i++)
-		// 		printf("file[%d] = %s\n", i, files[i]);
-		// 	if (files[i] == NULL)
-		// 		printf("file[%d] = NULL\n", i);
-		// }
-		// else printf("files = NULL\n");
+		//printf("flags = %s\n", flags);
+		
 
 		// DIR *file = opendir(".");
 		// struct dirent *tmp = readdir(file);
@@ -66,12 +61,12 @@ int main(int argc, char **argv) {
 			// 	closedir(file);
 			// }
 		//}
-		if (flags != NULL) { // если есть флаги
-			t_list *test = mx_get_files_list(files);
-			mx_printstr("\n");
-			mx_print_long_format(test);
-			mx_printstr("\n");
-		}
+		// if (flags != NULL) { // если есть флаги
+		// 	t_list *test = mx_get_files_list(files);
+		// 	mx_printstr("\n");
+		// 	mx_print_long_format(test);
+		// 	mx_printstr("\n");
+		// }
 	}
 
 /*  кінець */
