@@ -2,25 +2,42 @@
 
 static void get_mode(t_file *file, struct stat fs);
 static char get_acl(char *file);
-static void get_owner(t_file *file, struct stat fs);
-static void get_group(t_file *file, struct stat fs);
-static void mx_get_time_attr(t_file *file, struct stat fs);
+static void get_owner_group(t_file *file, struct stat fs);
+static void get_time_attr(t_file *file, struct stat fs);
+static void get_path(t_file *file, char *dir);
 
-t_file *mx_get_filesattr(char *filename) {
+t_file *mx_get_filesattr(char *filename, char *directory) {
     t_file *file = malloc(sizeof(t_file));
 	struct stat fs;
 
 	stat(filename, &fs);
-
 	file->filename = filename;
+	get_path(file, directory);
+    lstat(file->path, &fs);
 	file->blocks = fs.st_blocks;
 	get_mode(file, fs);
 	file->links = fs.st_nlink;
-	get_owner(file, fs);
-	get_group(file, fs);
+	get_owner_group(file, fs);
 	file->size = fs.st_size;
-	mx_get_time_attr(file, fs);
+	get_time_attr(file, fs);
     return file;
+}
+
+static void get_path(t_file *file, char *dir) {
+    int len = mx_strlen(dir);
+
+	if (dir[len - 1] != '/' && file->filename[0] != '/') {
+    	file->path = mx_strjoin(dir, "/");
+		file->path = mx_strjoin(file->path, file->filename);
+	}
+	else if ((dir[len - 1] == '/' && file->filename[0] != '/') 
+			|| (dir[len - 1] != '/' && file->filename[0] == '/')) {
+		file->path = mx_strjoin(dir, file->filename);
+	}
+	else if (dir[len] == '/' && file->filename[0] == '/') {
+        file->path = mx_strjoin(dir, file->filename + 1);
+        return;
+    }
 }
 
 static void get_mode(t_file *file, struct stat fs) {
@@ -63,18 +80,15 @@ static char get_acl(char *file) {
     return character;
 }
 
-static void get_owner(t_file *file, struct stat fs) {
+static void get_owner_group(t_file *file, struct stat fs) {
     struct passwd *pw;
+	struct group *grp;
 
     pw = getpwuid(fs.st_uid);
     if (pw->pw_name != NULL)
         file->owner = mx_strdup(pw->pw_name);
     else
     	file->owner = mx_itoa(fs.st_uid);
-}
-
-static void get_group(t_file *file, struct stat fs) {
-    struct group *grp;
 
     grp = getgrgid(fs.st_gid);
     if (grp != NULL)
@@ -83,7 +97,7 @@ static void get_group(t_file *file, struct stat fs) {
 		file->group = mx_itoa(fs.st_gid);
 }
 
-static void mx_get_time_attr(t_file *file, struct stat fs) {  
+static void get_time_attr(t_file *file, struct stat fs) {  
 	char *str;
     int len;
 

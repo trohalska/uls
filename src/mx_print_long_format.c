@@ -8,15 +8,14 @@ void mx_print_long_format(t_list *lf) {
     
     ml = mx_get_lens_for_print(lf);
     for (t_list *q = lf; q; q = q->next) {
-        if (!mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
+        //if (!mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
             print(q->data, ml);
     }
-    for (t_list *q = lf; q; q = q->next) {
-        if (mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
-            print(q->data, ml);
-        // if (!mx_strcmp((((t_file *)q->data)->filename), "uls"))
-        //     mx_printstr();
-    }
+    // for (t_list *q = lf; q; q = q->next) {
+    //     if (mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
+    //         print(q->data, ml);
+        
+    // }
 
 }
 

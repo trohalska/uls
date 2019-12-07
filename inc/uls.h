@@ -28,6 +28,8 @@ typedef struct s_uls {
 } t_uls;
 
 typedef struct s_file {
+	char *path;
+	char *filename; 	//d_name in readdir
 	blkcnt_t blocks; 	//-s flag
 	char *mode; 		//stat st_mode
 	int links; 			//stat st_ino
@@ -38,7 +40,6 @@ typedef struct s_file {
 	char *m_time; 		//stat st_mtime
     char *c_time; 		//-U flag
 	char *status_time; 	//-c flag
-    char *filename; 	//d_name in readdir
 } t_file;
 
 typedef struct s_maxlens_for_print {
@@ -66,9 +67,9 @@ bool mx_isdir(char *filename, t_list *q);
 bool mx_ishidden(char *filename, t_list *q);
 char *mx_get_flags(int argc, char **argv); // получаешь строку флагов
 //t_list *mx_get_arg_f_d(int argc, char **argv, t_list **d_argv); // получаешь лист файлов и лист папок
-t_file *mx_get_filesattr(char *filename);
-t_list *mx_get_files_list_dir(char *dir); // получаешь лист атрибудов содержимого директории
-t_list *mx_get_files_list(t_list *files); // получаешь лист атрибудов списка файлов
+t_file *mx_get_filesattr(char *filename, char *directory);
+t_list *mx_get_files_list_dir(char *dir); // получаешь лист атрибутов содержимого директории
+t_list *mx_get_files_list(t_list *files, char *dir); // получаешь лист атрибутов списка файлов
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 
 void mx_print_all(int argc, char **argv, char *flags); // печать

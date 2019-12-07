@@ -11,7 +11,7 @@ void mx_print_all(int argc, char **argv, char *flags) {
 
 	if (flags[0] == 'l') { // костыль // поки тільки для -l
 		if (!f_names && !d_names) {
-			mx_print_one_dir(mx_get_files_list_dir("."));  // зробити з указателем на функцію
+			mx_print_one_dir(mx_get_files_list_dir(".")); // зробити з указателем на функцію
 			return;
 		}
 		print_f_d(f_names, d_names);
@@ -24,7 +24,7 @@ static void print_f_d(t_list *f_names, t_list *d_names) {
 	t_list *fl_attr;
 
 	if (f_names) {
-    	fl_attr = mx_get_files_list(f_names);
+    	fl_attr = mx_get_files_list(f_names, ".");
         mx_print_long_format(fl_attr); // зробити з указателем на функцію
         if (mx_list_size(d_names) > 0)
             mx_printstr("\n");
