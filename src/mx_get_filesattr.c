@@ -2,24 +2,24 @@
 
 static void get_mode(t_file *file, struct stat fs);
 static char get_acl(char *file);
-static void get_owner_group(t_file *file, struct stat fs);
-static void get_time_attr(t_file *file, struct stat fs);
+static void get_owner_group(t_file *file, struct stat fs, t_command *c);
+static void get_time(t_file *file, struct stat fs, t_command *c);
 static void get_path(t_file *file, char *dir);
 
-t_file *mx_get_filesattr(char *filename, char *directory) {
+t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
     t_file *file = malloc(sizeof(t_file));
 	struct stat fs;
 
-	stat(filename, &fs);
 	file->filename = filename;
 	get_path(file, directory);
     lstat(file->path, &fs);
 	file->blocks = fs.st_blocks;
 	get_mode(file, fs);
 	file->links = fs.st_nlink;
-	get_owner_group(file, fs);
+	get_owner_group(file, fs, c);
 	file->size = fs.st_size;
-	get_time_attr(file, fs);
+	get_time(file, fs, c);
+
     return file;
 }
 
@@ -80,39 +80,43 @@ static char get_acl(char *file) {
     return character;
 }
 
-static void get_owner_group(t_file *file, struct stat fs) {
+static void get_owner_group(t_file *file, struct stat fs, t_command *c) {
     struct passwd *pw;
 	struct group *grp;
 
     pw = getpwuid(fs.st_uid);
-    if (pw->pw_name != NULL)
+    if (pw->pw_name != NULL && !(c->print_owner_group_num))
         file->owner = mx_strdup(pw->pw_name);
     else
     	file->owner = mx_itoa(fs.st_uid);
 
     grp = getgrgid(fs.st_gid);
-    if (grp != NULL)
+    if (grp != NULL && !(c->print_owner_group_num))
         file->group = mx_strdup(grp->gr_name);
     else
 		file->group = mx_itoa(fs.st_gid);
 }
 
-static void get_time_attr(t_file *file, struct stat fs) {  
-	char *str;
+static void get_time(t_file *file, struct stat fs, t_command *c) {  
+	char *str = NULL;
     int len;
 
-    str = ctime(&fs.st_mtime);
-    len = mx_strlen(str);
-	file->m_time = mx_strnew(len - 13);
-	file->m_time = mx_strncpy(file->m_time, str + 4, len - 13);
-
-	str = ctime(&fs.st_atime);
-    len = mx_strlen(str);
-	file->a_time = mx_strnew(len - 13);
-	file->a_time = mx_strncpy(file->a_time, str + 4, len - 13);
-	
-	str = ctime(&fs.st_ctime);
-    len = mx_strlen(str);
-	file->c_time = mx_strnew(len - 13);
-	file->c_time = mx_strncpy(file->c_time, str + 4, len - 13);
+    if (c->time_type == time_mtime) {
+		str = ctime(&fs.st_mtime);
+	    len = mx_strlen(str);
+		file->time = mx_strnew(len - 13);
+		file->time = mx_strncpy(file->time, str + 4, len - 13);
+	}
+	else if (c->time_type == time_atime) {
+		str = ctime(&fs.st_atime);
+	    len = mx_strlen(str);
+		file->time = mx_strnew(len - 13);
+		file->time = mx_strncpy(file->time, str + 4, len - 13);
+	}
+	else {
+		str = ctime(&fs.st_ctime);
+	    len = mx_strlen(str);
+		file->time = mx_strnew(len - 13);
+		file->time = mx_strncpy(file->time, str + 4, len - 13);
+	}
 }

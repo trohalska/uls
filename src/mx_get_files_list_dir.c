@@ -3,7 +3,7 @@
 t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b));
 static bool strcmp_names_bool(void *d1, void *d2);
 
-t_list *mx_get_files_list_dir(char *dir) {
+t_list *mx_get_files_list_dir(char *dir, t_command *c) {
     t_list *lf = NULL;
     DIR *directory;
     struct dirent *entry;
@@ -15,7 +15,7 @@ t_list *mx_get_files_list_dir(char *dir) {
     else {
         while ((entry = readdir(directory))) {
             if (entry->d_name[0] != '.')
-                mx_push_back(&lf, mx_get_filesattr(entry->d_name, dir));
+                mx_push_back(&lf, mx_get_filesattr(entry->d_name, dir, c));
         }
         closedir(directory);
     }
