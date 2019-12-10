@@ -17,6 +17,13 @@ t_command *mx_create_command(int argc, char **argv)
 				// sort_and_time_flags(argv[i][j], c);
 			}
 		else break;
+
+		// if (isatty(STDOUT_FILENO))
+		//        mx_standart_print(entry);
+		//    else
+		//        mx_ls_wf(entry);
+
+
 	return c;
 }
 
@@ -24,11 +31,11 @@ static t_command *initiailze_default()
 {
 	t_command *c = (t_command *)malloc(sizeof(t_command));
 
-	//c->print_func = mx_print_std_format;
-	//c->print_func = mx_print_col_format; // ----------------- заменить на стандарт при готовности
-
 	//c->sort_func = mx_sort_name; // ---------------- сделать
-	c->print_func = col_format;
+	if (isatty(STDOUT_FILENO))
+		c->print_func = std_format;
+	else
+		c->print_func = col_format;
 	c->time_type = time_mtime;
 	// c->print_hidden = false;			// -a
 	// c->print_reverse = false;			// -r
@@ -49,9 +56,9 @@ static void print_and_filter_flags(char flag, t_command *c)
 		case 'l':
 			c->print_func = long_format;
 			break;
-		// case 'C':	// Вывод в несколько колонок с сортировкой по колонкам.
-		// 	c->print_func = mx_print_std_format;
-		// 	break;
+		case 'C':	// Вывод в несколько колонок с сортировкой по колонкам.
+			c->print_func = std_format;
+			break;
 		case '1':
 			c->print_func = col_format;
 			break;

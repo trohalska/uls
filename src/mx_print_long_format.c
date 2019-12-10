@@ -11,12 +11,6 @@ void mx_print_long_format(t_list *lf, t_command *c) {
         //if (!mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
             print(q->data, ml, c);
     }
-    // for (t_list *q = lf; q; q = q->next) {
-    //     if (mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
-    //         print(q->data, ml);
-        
-    // }
-
 }
 
 static void print(t_file *file, t_maxlens_for_print *ml, t_command *c) {
