@@ -5,11 +5,13 @@ static char get_acl(char *file);
 static void get_owner_group(t_file *file, struct stat fs, t_command *c);
 static void get_time(t_file *file, struct stat fs, t_command *c);
 static void get_path(t_file *file, char *dir);
+static void get_size(t_file *file, struct stat fs);
 
 t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
     t_file *file = malloc(sizeof(t_file));
 	struct stat fs;
 
+	stat(filename, &fs);
 	file->filename = filename;
 	get_path(file, directory);
     lstat(file->path, &fs);
@@ -17,7 +19,8 @@ t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
 	get_mode(file, fs);
 	file->links = fs.st_nlink;
 	get_owner_group(file, fs, c);
-	file->size = fs.st_size;
+	//file->size = fs.st_size;
+	get_size(file, fs);
 	get_time(file, fs, c);
 
     return file;
@@ -59,8 +62,28 @@ static void get_mode(t_file *file, struct stat fs) {
 	res[8] = (S_IWOTH & fs.st_mode) ? 'w' : '-';
 	res[9] = (S_ISTXT & fs.st_mode) ? 't' : \
 			 (S_IXOTH & fs.st_mode) ? 'x' : '-';
-	res[10] = get_acl(file->filename);
+	res[10] = get_acl(file->path);
 	file->mode = res;
+}
+
+static void get_size(t_file *file, struct stat fs) {
+	// char *major, *minor;
+
+	// if (S_ISBLK(fs.st_mode) || S_ISCHR(fs.st_mode)) {
+	// 	major = mx_itoa((fs.st_rdev >> 24) & 0xffffff);
+	// 	minor = mx_itoa(fs.st_rdev & 0xffffff);
+	// 	if((fs.st_rdev & 0xffffff) > 999) {
+	// 		minor = mx_nbr_to_hex(fs.st_rdev & 0xffffff);
+	// 		while (mx_strlen(minor) < 10) {
+	// 			minor = mx_strjoin("0", minor);
+	// 		}
+	// 		minor[1] = 'x';
+    // 	}
+	// 	mx_printstr(major);
+	// 	mx_printstr(minor);
+	// }
+	// else
+		file->size = fs.st_size;
 }
 
 static char get_acl(char *file) {

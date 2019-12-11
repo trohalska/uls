@@ -37,6 +37,7 @@ static t_command *initiailze_default()
 	else
 		c->print_func = col_format;
 	c->time_type = time_mtime;
+	c->print_recursion = false;			// -R
 	// c->print_hidden = false;			// -a
 	// c->print_reverse = false;			// -r
 	c->print_owner = true;				// -g
@@ -61,6 +62,9 @@ static void print_and_filter_flags(char flag, t_command *c)
 			break;
 		case '1':
 			c->print_func = col_format;
+			break;
+		case 'R':
+			c->print_recursion = true;
 			break;
 		case 'g':	// -l, id владельца не выводится.
 			c->print_owner = false;

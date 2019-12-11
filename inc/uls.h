@@ -55,6 +55,7 @@ typedef struct s_command {
 	int print_func;
 	int time_type;
 
+	bool print_recursion;		// -R
 	// bool print_hidden;			// -a
 	// bool print_reverse;			// -r
 	bool print_owner;			// -g
