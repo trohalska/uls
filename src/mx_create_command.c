@@ -39,7 +39,7 @@ static t_command *initiailze_default()
 	c->time_type = time_mtime;
 	c->print_recursion = false;			// -R
 	// c->print_hidden = false;			// -a
-	// c->print_reverse = false;			// -r
+	// c->print_reverse = false;		// -r
 	c->print_owner = true;				// -g
 	c->print_group = true;				// -o
 	c->print_owner_group_num = false;	// -n

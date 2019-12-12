@@ -1,13 +1,80 @@
 #include "uls.h"
 
-void mx_print_std_format(t_list *lf) {
-    // t_list *q;
-    // t_file *tmp;
+static int get_maxlen_name(t_list *lf);
+static char **get_names(t_list *list, int size);
+static void print_filesnames(char **names, int size, int max, int rows);
+static void print_filesnames_isatty(char **names, int size, int max, int cols);
 
-    // for (q = lf; q; q = q->next) {
-    //     tmp = q->data;
-    //     mx_printstr(tmp->filename);
-    //     mx_printchar('\t');
-    // }
-    if (lf) mx_printstr("standart print\n");
+void mx_print_std_format(t_list *lf) {
+    int maxlencol = get_maxlen_name(lf);
+    int count_names = mx_list_size(lf);
+    char **names = get_names(lf, count_names);
+    int cols;
+    struct winsize win;  
+
+    ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
+    cols = win.ws_col / (maxlencol + 8);
+
+    if (isatty(STDOUT_FILENO))
+        print_filesnames(names, count_names, maxlencol, cols);
+    else
+        print_filesnames_isatty(names, count_names, maxlencol, 2);
+    
+    mx_del_strarr(&names);    
+}
+
+static int get_maxlen_name(t_list *lf) {
+    int max = 0, tmp = 0;
+    
+    for (t_list *q = lf; q != NULL; q = q->next) {
+        tmp = mx_strlen(((t_file *)q->data)->filename);
+        if (tmp > max)
+            max = tmp;
+    }
+    return max;
+}
+
+static char **get_names(t_list *list, int size) {
+    char **result = NULL;
+    int i = 0;
+
+    result = (char **)malloc((size + 1) * sizeof(char *));
+    for (t_list *q = list; q != NULL; q = q->next, i++)
+        result[i] = mx_strdup(((t_file *)q->data)->filename);
+    result[size] = NULL;
+    return result;
+}
+
+static void print_filesnames(char **names, int size, int max, int cols) {
+    int rows;
+    rows = size / cols;
+    if (size % cols) 
+        rows += 1;
+    for (int i = 0; i < rows; i++) {
+        for (int j = 0; i + j < size; j += rows) {
+            mx_printstr(names[i + j]);
+            if (mx_strlen(names[i + j]) < max)
+                mx_printspaces(max - mx_strlen(names[i + j]));
+            if ((j + 1) % 2 && !isatty(STDOUT_FILENO))
+                mx_printchar('\t');
+        }
+        mx_printchar('\n');
+    }
+}
+
+static void print_filesnames_isatty(char **names, int size, int max, int cols) {
+    int rows;
+    rows = size / cols;
+    if (size % cols) 
+        rows += 1;
+    for (int i = 0; i < size; i += 2) {
+        mx_printstr(names[i]);
+        if (names[i + 1]) {
+            if (mx_strlen(names[i]) < max)
+                mx_printspaces(max - mx_strlen(names[i]));
+            mx_printchar('\t');
+            mx_printstr(names[i+1]);
+        }        
+        mx_printchar('\n');
+    }
 }
