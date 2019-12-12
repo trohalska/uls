@@ -92,7 +92,6 @@ bool mx_ishidden(char *filename, t_list *q);
 t_command *mx_create_command(int argc, char **argv); // получаешь комманду
 t_file *mx_get_filesattr(char *filename, char *directory, t_command *c);
 t_list *mx_get_files_list_dir(char *dir, t_command *c); // получаешь лист атрибутов содержимого директории
-t_list *mx_get_files_list(t_list *files, char *dir, t_command *c); // получаешь лист атрибутов списка файлов
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 
 void mx_print_long_format(t_list *lf, t_command *c);

@@ -1,11 +1,4 @@
-echo user ----------
-echo 
-./uls $1 $2 $3 $4 $5 $6
-echo 
-echo ls ------------
-echo 
-ls $1 $2 $3 $4 $5 $6
-echo
+
 echo ---------- user vs test
 echo 
 diff <(./uls $1 $2 $3 $4 $5 $6) <(ls $1 $2 $3 $4 $5 $6)

@@ -1,11 +1,12 @@
 #include "uls.h"
 
 static void mx_prepare_list_and_print(t_list *lf, t_command *c);
+static void print_directories(t_list *d_names, t_command *c);
 static void print_one_dir(char *dir, t_command *c);
+static void print_one_dir_rec(char *dir, t_command *c);
 static t_list *mx_get_arg_f(int argc, char **argv);
 static t_list *mx_get_arg_d(int argc, char **argv);
 static bool strcmp_bool(void *d1, void *d2);
-
 
 int main(int argc, char **argv) {
 	t_command *c = mx_create_command(argc, argv);
@@ -17,26 +18,44 @@ int main(int argc, char **argv) {
 		mx_push_back(&d_names, ".");
 
 	if (f_names) {
-        mx_prepare_list_and_print(mx_get_files_list(f_names, ".", c), c);
+		t_list *tmp;
+		for (t_list *q = f_names; q; q = q->next) {
+			mx_push_back(&tmp, mx_get_filesattr(q->data, ".", c));
+		}
+        mx_prepare_list_and_print(tmp, c);
         if (mx_list_size(d_names) > 0)
             mx_printstr("\n");
-    }
-    if (d_names) {
-		for (t_list *tmp = d_names; tmp; tmp = tmp->next) {
-			if (mx_list_size(d_names) != 1 || f_names) {
-	            mx_printstr(tmp->data);
-	   			mx_printstr(":\n");
-	        }
-	        print_one_dir(tmp->data, c);
-	        if (tmp->next != NULL)
-	        	mx_printstr("\n");
+		if (d_names && mx_list_size(d_names) == 1) {
+			mx_printstr(d_names->data);
+	   		mx_printstr(":\n");
 		}
-	}
+    }
+    print_directories(d_names, c);
 
 	// рекурсия?
 
 	// system("leaks -q uls");
 	return 0;	
+}
+
+static void print_directories(t_list *d_names, t_command *c) {
+	if (d_names) {
+		for (t_list *tmp = d_names; tmp; tmp = tmp->next) {
+			if (mx_list_size(d_names) != 1) {
+	            mx_printstr(tmp->data);
+	   			mx_printstr(":\n");
+	        }
+			
+			if (c->print_recursion)
+				print_one_dir_rec(tmp->data, c);
+			else
+	        	print_one_dir(tmp->data, c);
+
+	        if (tmp->next != NULL){
+	        	mx_printstr("\n");
+			}
+		}
+	}
 }
 
 static void print_one_dir(char *dir, t_command *c) {
@@ -54,6 +73,36 @@ static void print_one_dir(char *dir, t_command *c) {
 	
     mx_prepare_list_and_print(files_list, c);
 
+	// free(files_list);
+}
+
+static void print_one_dir_rec(char *dir, t_command *c) {
+    blkcnt_t res = 0;
+	t_list *files_list = mx_get_files_list_dir(dir, c);
+	// sort and filter
+
+    for (t_list *q = files_list; q != NULL; q = q->next) {
+        t_file *tmp = q->data;
+        res += tmp->blocks;
+    }
+	mx_printstr("total ");
+    mx_printint((int)res);
+    mx_printstr("\n");
+    mx_prepare_list_and_print(files_list, c);
+	
+	for (t_list *q = files_list; q; q = q->next) {
+		if (mx_isdir(NULL, q)) {
+			t_file *tmp = q->data;
+			// if (!mx_strcmp(tmp->filename, ".") && !mx_strcmp(tmp->filename, "..")) { // ??????????????
+	        	
+				mx_printstr("\n");
+				mx_printstr(tmp->path);
+	   			mx_printstr(":\n");
+				print_one_dir_rec(tmp->path, c);
+			// }
+		}
+	}
+	
 	// free(files_list);
 }
 
