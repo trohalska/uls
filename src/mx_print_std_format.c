@@ -55,7 +55,6 @@ static void print_filesnames(char **names, int size, int max, int cols) {
             mx_printstr(names[i + j]);
             if (mx_strlen(names[i + j]) < max)
                 mx_printspaces(max - mx_strlen(names[i + j]));
-            if ((j + 1) % 2 && !isatty(STDOUT_FILENO))
                 mx_printchar('\t');
         }
         mx_printchar('\n');
