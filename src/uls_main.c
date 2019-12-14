@@ -3,17 +3,24 @@
 static void mx_prepare_list_and_print(t_list *lf, t_command *c);
 static void print_directories(t_list *d_names, t_command *c);
 static void print_one_dir(char *dir, t_command *c);
-static t_list *mx_get_arg_f(int argc, char **argv);
-static t_list *mx_get_arg_d(int argc, char **argv);
+static t_list *mx_get_arg_f(int argc, char **argv, int p);
+static t_list *mx_get_arg_d(int argc, char **argv, int p);
 static bool strcmp_bool(void *d1, void *d2);
 
 int main(int argc, char **argv) {
+	int position = mx_check(argc, argv);
 	t_command *c = mx_create_command(argc, argv);
-	//t_list *errors
-	t_list *f_names = mx_get_arg_f(argc, argv);
-	t_list *d_names = mx_get_arg_d(argc, argv);
+	t_list *f_names = mx_get_arg_f(argc, argv, position);
+	t_list *d_names = mx_get_arg_d(argc, argv, position);
 
-	if (!f_names && !d_names)
+	// mx_printstr(argv[1]);
+	// mx_printstr(" - v\n");
+	// if (f_names) mx_printlist(f_names); else mx_printstr("NULL");
+	// mx_printstr(" - f\n");
+	// if (d_names) mx_printlist(d_names); else mx_printstr("NULL");
+	// mx_printstr(" - d\n");
+
+	if (!f_names && !d_names && !c->error_null_args)
 		mx_push_back(&d_names, ".");
 
 	if (f_names) {
@@ -24,14 +31,20 @@ int main(int argc, char **argv) {
         mx_prepare_list_and_print(tmp, c);
         if (mx_list_size(d_names) > 0)
             mx_printstr("\n");
-		if (d_names && mx_list_size(d_names) == 1) {
-			mx_printstr(d_names->data);
-	   		mx_printstr(":\n");
-		}
     }
+
+	if ((f_names && d_names)
+		/*|| (argc - position - mx_list_size(f_names) - mx_list_size(d_names)) != 0*/) {
+		mx_printstr(d_names->data);
+		mx_printstr(":\n");
+	}
     print_directories(d_names, c);
+	mx_clear_list_new(&f_names);
+	mx_clear_list_new(&d_names);
+
+	// mx_printstr("\n\n");
 	// system("leaks -q uls");
-	return 0;	
+	return 0;
 }
 
 static void print_directories(t_list *d_names, t_command *c) {
@@ -50,15 +63,15 @@ static void print_directories(t_list *d_names, t_command *c) {
 }
 
 static void print_one_dir(char *dir, t_command *c) {
-    
 	t_list *files_list = mx_get_files_list_dir(dir, c);
+	t_file *tmp;
+
 	// sort and filter
     mx_prepare_list_and_print(files_list, c);
-
 	if (c->print_recursion) // recursion
 		for (t_list *q = files_list; q; q = q->next) {
 			if (mx_isdir(NULL, q)) {
-				t_file *tmp = q->data;
+				tmp = q->data;
 				// if (!mx_strcmp(tmp->filename, ".") && !mx_strcmp(tmp->filename, "..")) { // ??????????????
 					mx_printstr("\n");
 					mx_printstr(tmp->path);
@@ -67,8 +80,7 @@ static void print_one_dir(char *dir, t_command *c) {
 				// }
 			}
 		}
-
-	// free(files_list);
+	mx_clear_files_list(&files_list);
 }
 
 static void mx_prepare_list_and_print(t_list *lf, t_command *c) {
@@ -95,27 +107,21 @@ static void mx_prepare_list_and_print(t_list *lf, t_command *c) {
 	}
 }
 
-static t_list *mx_get_arg_f(int argc, char **argv) {
+static t_list *mx_get_arg_f(int argc, char **argv, int i) {
 	t_list *f_argv = NULL;
-	int i = 1;
 
-	while (argv[i] && argv[i][0] == '-')
-		i++;
-	for (; i < argc; i++)
-		if (!mx_isdir(argv[i], NULL))
+	for (;i < argc; i++)
+		if (argv[i] && !mx_isdir(argv[i], NULL))
 			mx_push_back(&f_argv, argv[i]);
 	mx_sort_list(f_argv, strcmp_bool);
 	return f_argv;
 }
 
-static t_list *mx_get_arg_d(int argc, char **argv) {
+static t_list *mx_get_arg_d(int argc, char **argv, int i) {
 	t_list *d_argv = NULL;
-	int i = 1;
 
-	while (argv[i] && argv[i][0] == '-')
-		i++;
-	for (; i < argc; i++)
-		if (mx_isdir(argv[i], NULL)) 
+	for (;i < argc; i++)
+		if (argv[i] && mx_isdir(argv[i], NULL))
 			mx_push_back(&d_argv, argv[i]);
 	mx_sort_list(d_argv, strcmp_bool);
 	return d_argv;

@@ -21,6 +21,8 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
+#define ULS_FLAGS "CRglno1"
+
 typedef struct s_uls {
 	void *data;
     int len;
@@ -50,11 +52,10 @@ typedef struct s_maxlens_for_print {
 } t_maxlens_for_print;
 
 typedef struct s_command {
-	//(* print_func)(t_list *, t_command *);
-	// (* sort_func)(t_list *);
 	int print_func;
 	int time_type;
 
+	bool error_null_args; 		// if one of them NULL
 	bool print_recursion;		// -R
 	// bool print_hidden;			// -a
 	// bool print_reverse;			// -r
@@ -66,6 +67,8 @@ typedef struct s_command {
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
 	// bool format_T;				// -T
+
+
 } t_command;
 
 enum e_time_type {
@@ -81,12 +84,11 @@ enum e_print_type {
 
 // -------------------------------- to mylibmx
 void mx_printspaces(int count);
+void mx_clear_list_new(t_list **list);
+void mx_clear_list(t_list **list);
 
-// ------------------ переделать
-void mx_check(int argc, char **argv);
-void mx_if_no_argv(DIR *entry);
 
-// new
+int mx_check(int argc, char **argv);
 bool mx_isdir(char *filename, t_list *q);
 bool mx_ishidden(char *filename, t_list *q);
 t_command *mx_create_command(int argc, char **argv); // получаешь комманду
@@ -97,5 +99,7 @@ t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 void mx_print_long_format(t_list *lf, t_command *c);
 void mx_print_std_format(t_list *lf); // ---------------rewrite
 void mx_print_col_format(t_list *lf);
+
+void mx_clear_files_list(t_list **fl);
 
 #endif

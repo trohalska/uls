@@ -22,7 +22,6 @@ int mx_count_words_isspace(const char *str, int *kwl);
 int mx_strncmp(const char *s1, const char *s2, int n);
 void mx_printerr(const char *s);
 int mx_atoi(const char *str);
-void mx_printlist(t_list *list);
 
 int **mx_create_matrix(int G, int fillin);
 void mx_del_arr_matrix_int(int ***arr);
@@ -90,5 +89,8 @@ void mx_pop_front(t_list **head);
 void mx_pop_back(t_list **head);
 int mx_list_size(t_list *list);
 t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *));
+
+void mx_printlist(t_list *list);
+
 
 #endif

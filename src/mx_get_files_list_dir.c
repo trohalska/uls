@@ -1,16 +1,25 @@
 #include "uls.h"
 
-t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b));
+static t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b));
 static bool strcmp_names_bool(void *d1, void *d2);
 
 t_list *mx_get_files_list_dir(char *dir, t_command *c) {
+    // char *str = NULL;
     t_list *lf = NULL;
     DIR *directory;
     struct dirent *entry;
 
     if (!(directory = opendir(dir))) {
-        //mx_printerr(get_opendir_error(dir));
-        mx_printerr("uls: : Permission denied (дописать)\n");
+        int i = mx_strlen(dir) - 1;
+
+        if (dir[i] == '/')
+            perror("uls: ");
+        else {
+            while (dir[i] != '/')
+                i--;
+            mx_printerr("uls: ");
+            perror(&dir[i + 1]);
+        }
     }
     else {
         while ((entry = readdir(directory))) {
@@ -23,7 +32,7 @@ t_list *mx_get_files_list_dir(char *dir, t_command *c) {
     return lf;
 }
 
-t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b)) {
+static t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b)) {
     t_list *help = NULL, *store = list, *tmp = list;
     void *swap_data;
 
@@ -31,7 +40,7 @@ t_list *mx_sort_ls_list(t_list *list, bool (*cmp)(void *a, void *b)) {
         help = store;
         while (help) {
             t_file *q = help->data;
-            if (help->next && 
+            if (help->next &&
                 cmp(q->filename, ((t_file *)help->next->data)->filename)) {
                 swap_data = help->data;
                 help->data = help->next->data;

@@ -5,30 +5,31 @@ static void print_and_filter_flags(char flag, t_command *c);
 // static void format_flags(char flag, t_command *c);
 // static void sort_and_time_flags(char flag, t_command *c);
 
-t_command *mx_create_command(int argc, char **argv)
-{
+t_command *mx_create_command(int argc, char **argv) {
 	t_command *c = initiailze_default();
+	int i = 1;
 
-	for (int i = 1; i < argc; i++)
-		if (argv[i][0] == '-')
+	for (; i < argc; i++)
+		if (argv[i] && argv[i][0] == '-') {
+			if (mx_strcmp(argv[i], "--") == 0)
+				break;
 			for (int j = 1; j < mx_strlen(argv[i]); j++) {
 				print_and_filter_flags(argv[i][j], c);
-				// format_flags(argv[i][j], c);				
+				// format_flags(argv[i][j], c);
 				// sort_and_time_flags(argv[i][j], c);
 			}
-		else break;
-
-		// if (isatty(STDOUT_FILENO))
-		//        mx_standart_print(entry);
-		//    else
-		//        mx_ls_wf(entry);
-
-
+		}
+		else
+			break;
+	for (; i < argc; i++)
+		if (!argv[i]) {
+			c->error_null_args = true;
+			break;
+		}
 	return c;
 }
 
-static t_command *initiailze_default()
-{
+static t_command *initiailze_default() {
 	t_command *c = (t_command *)malloc(sizeof(t_command));
 
 	//c->sort_func = mx_sort_name; // ---------------- сделать
@@ -37,6 +38,7 @@ static t_command *initiailze_default()
 	else
 		c->print_func = col_format;
 	c->time_type = time_mtime;
+	c->error_null_args = false;
 	c->print_recursion = false;			// -R
 	// c->print_hidden = false;			// -a
 	// c->print_reverse = false;		// -r
@@ -51,8 +53,7 @@ static t_command *initiailze_default()
 	return c;
 }
 
-static void print_and_filter_flags(char flag, t_command *c)
-{
+static void print_and_filter_flags(char flag, t_command *c) {
 	switch (flag) {
 		case 'l':
 			c->print_func = long_format;
@@ -78,8 +79,7 @@ static void print_and_filter_flags(char flag, t_command *c)
 	}
 }
 
-// static void format_flags(char flag, t_command *c)
-// {
+// static void format_flags(char flag, t_command *c) {
 // 	switch (flag) {
 // 		case 'a':	// Вывести список всех файлов (в т.ч "." и "..")
 // 			c->print_hidden = true;
@@ -90,7 +90,7 @@ static void print_and_filter_flags(char flag, t_command *c)
 // 		case 'h':	// print sizes in human readable form
 // 			c->format_h = true;
 // 			break;
-// 		case '@':	// display extended attribute keys and sizes in long (-l) output 
+// 		case '@':	// display extended attribute keys and sizes in long (-l) output
 // 			c->format_at_symbol = true;
 // 			break;
 // 		// case 'e':	// ???
@@ -102,8 +102,7 @@ static void print_and_filter_flags(char flag, t_command *c)
 // 	}
 // }
 
-// static void sort_and_time_flags(char flag, t_command *c)
-// {
+// static void sort_and_time_flags(char flag, t_command *c) {
 // 	switch (flag) {
 // 		// case 't':	// Имена файлов сортируются по времени, default - mtime
 // 		// 	c->sort_func = mx_sort_time;
@@ -123,37 +122,37 @@ static void print_and_filter_flags(char flag, t_command *c)
 //    		// sort_version,	/* -v */
 // }
 
-// -l	Вывод в длинном формате: перед именами файлов выдается режим доступа, 
-// 		количество ссылок на файл, имена владельца и группы, 
+// -l	Вывод в длинном формате: перед именами файлов выдается режим доступа,
+// 		количество ссылок на файл, имена владельца и группы,
 // 		размер в байтах и время последней модификации (см. ниже).
 // 		Если файл является специальным, то в поле размера выводится старший и младший номера устройства.
-// -r	Изменить порядок сортировки на обратный алфавитный или, при наличии флага -t, 
+// -r	Изменить порядок сортировки на обратный алфавитный или, при наличии флага -t,
 //		сначала выводить более старые файлы.
-// -t	Имена файлов сортируются по времени (сначала идут самые свежие файлы). 
+// -t	Имена файлов сортируются по времени (сначала идут самые свежие файлы).
 // 		По умолчанию используется время последнего изменения. См. также флаги -u и -c.
-// -u	Вместо времени последнего изменения использовать 
+// -u	Вместо времени последнего изменения использовать
 // 		время последнего доступа для сортировки (с флагом -t) или для вывода (с флагом -l).
 // -c	Вместо времени последнего изменения использовать
-// 		время последней модификации описателя файла (т.е. время создания файла, 
+// 		время последней модификации описателя файла (т.е. время создания файла,
 // 		изменения режима доступа к нему и т.п.) для сортировки (с флагом -t) или для вывода (с флагом -l).
 
 // ------------------ Командой ls обрабатываются следующие флаги: ----------------------------
 
 // -R	Рекурсивно обойти встретившиеся подкаталоги.
-// -d	Если аргумент является каталогом, то выводить только его имя, а не содержимое. 
+// -d	Если аргумент является каталогом, то выводить только его имя, а не содержимое.
 // 		Часто используется с флагом -l для получения сведений о состоянии каталога.
 // -x	Вывод в несколько колонок с сортировкой по строкам.
 // -m	Вывод в свободном формате, имена файлов разделяются запятыми.
 // -p	Если файл является каталогом, то выдавать после его имени символ /.
-// -F	Если файл является каталогом, то выдавать после его имени символ /; 
+// -F	Если файл является каталогом, то выдавать после его имени символ /;
 // 		если файл является выполняемым, то выдавать после его имени символ *.
 // -b	Выдавать непечатаемые символы, входящие в имя файла, в восьмеричном виде (\ddd).
 // -q	Выдавать непечатаемые символы, входящие в имя файла, в виде символа ?.
 // -i	Выдавать в первой колонке номера описателей файлов.
 // -s	Выдавать размер файлов в блоках (включая косвенные блоки).
-// -f	Рассматривать каждый аргумент как каталог и выводить его содержимое. 
-// 		Этот флаг отменяет флаги -l, -t, -s, -r и включает флаг -a. 
-// 		Сортировка имен файлов не производится; имена выдаются в таком порядке, 
+// -f	Рассматривать каждый аргумент как каталог и выводить его содержимое.
+// 		Этот флаг отменяет флаги -l, -t, -s, -r и включает флаг -a.
+// 		Сортировка имен файлов не производится; имена выдаются в таком порядке,
 // 		в каком они перечислены в каталоге.
 
 

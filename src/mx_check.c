@@ -1,40 +1,67 @@
 #include "uls.h"
 
-void mx_check(int argc, char **argv) {
-	if (argc == 1)
-	{
-		mx_printstr("incorrect flag");
-		exit(1);
-	}
-	if (argc < 1) {
-		perror("uncorect argument");
-		exit(1);
-	}
-	if (mx_strcmp(argv[1], "-l") == 0) {
-		char *str =  mx_strjoin("uls:",argv[2]);
-		//mx_printstr(str);
-		perror(str);
-		exit(1);
-	}
+static int mx_check_flags(int argc, char **argv);
+static void print_error_flag(char c, char *ex);
+static void mx_check_arguments(int argc, char **argv, int p);
+static void print_error_arguments(char *v);
 
+int mx_check(int argc, char **argv) {
+	int position = mx_check_flags(argc, argv);
+
+	if (argv[position] && mx_strcmp(argv[position], "--") == 0)
+		position++;
+
+	mx_check_arguments(argc, argv, position);
+
+	return position;
 }
 
-//DIR *dir;
-//dir = opendir(argv[1]);
-//struct dirent *entry1;
+static int mx_check_flags(int argc, char **argv) {
+	char *ex = "CRglno1"; // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+	int len_ex = mx_strlen(ex);
+	int i = 1;
 
-// if (!dir) {
-// 	char *str =  mx_strjoin("uls:",argv[2]);
-// 	//mx_printstr(str);
-// 	perror(str);
-// 	exit(1);
-// }
+	if (argc > 1) {
+		for (; i < argc; i++)
+			if (argv[1][0] == '-' && argv[i][0] == '-') {
+				if (mx_strcmp(argv[i], "--") == 0)
+					break;
+				for (int j = 1; j < mx_strlen(argv[i]); j++)
+					for (int k = 0; k < len_ex && argv[i][j] != ex[k]; k++)
+						if (k == len_ex - 1) {
+							print_error_flag(argv[i][j], ex);
+							exit(1);
+						}
+			}
+			else
+				break;
+	}
+	return i;
+}
 
-// if (!dir) {
-// 	mx_printerr("uls: ");
-// 	mx_printerr("dir");
-// 	mx_printerr(": ");
-// 	mx_printerr(strerror(errno));
-// 	mx_printerr("\n");
-// 	exit(1);
-// }
+static void print_error_flag(char c, char *ex) {
+	mx_printerr("uls: illegal option -- ");
+    write(2, &c, 1);
+    mx_printerr("\nusage: uls [-");
+    mx_printerr(ex);
+    mx_printerr("] [file ...]\n");
+}
+
+static void mx_check_arguments(int argc, char **argv, int p) {
+    struct stat buff;
+
+    for (int i = p; i < argc; i++) {
+        if (lstat(argv[i], &buff) != 0) {
+            print_error_arguments(argv[i]);
+            argv[i] = NULL;
+        }
+	}
+}
+
+static void print_error_arguments(char *v) {
+    mx_printerr("uls: ");
+    mx_printerr(v);
+    mx_printerr(": ");
+    mx_printerr(strerror(errno));
+    mx_printerr("\n");
+}

@@ -6,7 +6,7 @@ static void compare_numb(int *max, int numb);
 
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf) {
 	t_maxlens_for_print *len;
-	
+
 	len = malloc(sizeof(t_maxlens_for_print));
 	initialize(len);
 	for (t_list *q = lf; q != NULL; q = q->next) {
@@ -15,7 +15,7 @@ t_maxlens_for_print *mx_get_lens_for_print(t_list *lf) {
 		compare_str(&len->l_owner, tmp->owner);
 		compare_str(&len->l_group, tmp->group);
 		compare_numb(&len->l_size, tmp->size);
-	}	
+	}
 	return len;
 }
 
@@ -35,11 +35,13 @@ static void compare_str(int *max, char *str) {
 }
 
 static void compare_numb(int *max, int numb) {
-	int c = mx_strlen(mx_itoa(numb));
-	
+	char *tmp = mx_itoa(numb);
+	int c = mx_strlen(tmp);
+
 	if (*max < c) {
 		*max = c;
 	}
+	free(tmp);
 }
 
 // static int get_maxlen_links(t_list *lf) { //

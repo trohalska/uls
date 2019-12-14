@@ -19,21 +19,21 @@ t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
 	get_mode(file, fs);
 	file->links = fs.st_nlink;
 	get_owner_group(file, fs, c);
-	//file->size = fs.st_size;
 	get_size(file, fs);
 	get_time(file, fs, c);
-
     return file;
 }
 
 static void get_path(t_file *file, char *dir) {
     int len = mx_strlen(dir);
+	char *tmp = NULL;
 
 	if (dir[len - 1] != '/' && file->filename[0] != '/') {
-    	file->path = mx_strjoin(dir, "/");
-		file->path = mx_strjoin(file->path, file->filename);
+    	tmp = mx_strjoin(dir, "/");
+		file->path = mx_strjoin(tmp, file->filename);
+		free(tmp);
 	}
-	else if ((dir[len - 1] == '/' && file->filename[0] != '/') 
+	else if ((dir[len - 1] == '/' && file->filename[0] != '/')
 			|| (dir[len - 1] != '/' && file->filename[0] == '/')) {
 		file->path = mx_strjoin(dir, file->filename);
 	}
@@ -106,21 +106,27 @@ static char get_acl(char *file) {
 static void get_owner_group(t_file *file, struct stat fs, t_command *c) {
     struct passwd *pw;
 	struct group *grp;
+	char *tmp;
 
     pw = getpwuid(fs.st_uid);
     if (pw->pw_name != NULL && !(c->print_owner_group_num))
         file->owner = mx_strdup(pw->pw_name);
-    else
-    	file->owner = mx_itoa(fs.st_uid);
-
+    else {
+		tmp = mx_itoa(fs.st_uid);
+    	file->owner = mx_strdup(tmp);
+		free(tmp);
+	}
     grp = getgrgid(fs.st_gid);
     if (grp != NULL && !(c->print_owner_group_num))
         file->group = mx_strdup(grp->gr_name);
-    else
-		file->group = mx_itoa(fs.st_gid);
+    else {
+		tmp = mx_itoa(fs.st_gid);
+		file->group = mx_strdup(tmp);
+		free(tmp);
+	}
 }
 
-static void get_time(t_file *file, struct stat fs, t_command *c) {  
+static void get_time(t_file *file, struct stat fs, t_command *c) {
 	char *str = NULL;
     int len;
 
