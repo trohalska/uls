@@ -1,40 +1,53 @@
 #include "libmx.h"
 
+static void swap_str(char **str1, char** str2);
+static void check_str(int *last, int* first, char** arr, char* str3);
+static void main_job(char **arr, int *first, int *last, int *swap);
+
 int mx_quicksort(char **arr, int left, int right) {
-    int sum = 0;
-    if (!arr) return -1;
-    if (left < right)
-    {
-        int first = left, last = right;
-        char *middle = arr[(first + last) / 2];
-        for (; mx_strlen(arr[first]) < mx_strlen(middle); first++);
-        for (; mx_strlen(arr[last]) > mx_strlen(middle); last--);
-        if (first <= last)
-        {
-            if (mx_strlen(arr[first]) != mx_strlen(arr[last]) 
-                    && arr[first] != arr[last]) sum++; 
-            char *tmp = arr[first];
-            arr[first] = arr[last];
-            arr[last] = tmp;
-            first++;
-            last--;
-        }
+    int first = left;
+    int last = right;
+    char* middle = NULL;
+    int swap = 0;
+
+    if (!arr)
+        return -1;
+    if (left < right) {
+        middle = arr[(left + (right - left) / 2)];
         while (first <= last) {
-            while (mx_strlen(arr[first]) < mx_strlen(middle)) first++;
-            while (mx_strlen(arr[last]) > mx_strlen(middle)) last--;
-            if (first <= last)
-            {
-                if (mx_strlen(arr[first]) != mx_strlen(arr[last]) 
-                    && arr[first] != arr[last]) sum++; 
-                char *tmp = arr[first];
-                arr[first] = arr[last];
-                arr[last] = tmp;
-                first++;
-                last--;
-            }
+            check_str(&last, &first, arr, middle);
+            main_job(arr, &first, &last, &swap);
         }
-        sum += mx_quicksort(arr, left, last);
-        sum += mx_quicksort(arr, first, right);
     }
-    return sum;
+    if (left < last)
+        swap += mx_quicksort(arr, left, last);
+    if (first < right)
+        swap += mx_quicksort(arr, first, right);
+    return swap;
+}
+
+static void swap_str(char **str1, char** str2) {
+    char *temp = *str1;
+
+    *str1 = *str2;
+    *str2 = temp;
+}
+
+static void check_str(int *last, int* first, char** arr, char* str3) {
+    while (mx_strlen(arr[*first]) < mx_strlen(str3))
+        (*first)++;
+    while (mx_strlen(arr[*last]) > mx_strlen(str3))
+        (*last)--;
+}
+
+static void main_job(char **arr, int *first, int *last, int *swap) {
+    if (*first <= *last) {
+        if ((*first != *last) &&
+        (mx_strlen(arr[*first]) != mx_strlen(arr[*last]))) {
+            swap_str(&arr[*first], &arr[*last]);
+            (*swap)++;
+        }
+        (*first)++;
+        (*last)--;
+    }
 }

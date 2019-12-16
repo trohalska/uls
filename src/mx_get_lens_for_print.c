@@ -7,6 +7,8 @@ static void compare_numb(int *max, int numb);
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf) {
 	t_maxlens_for_print *len;
 
+	if(!lf)
+		return NULL;
 	len = malloc(sizeof(t_maxlens_for_print));
 	initialize(len);
 	for (t_list *q = lf; q != NULL; q = q->next) {
@@ -43,59 +45,3 @@ static void compare_numb(int *max, int numb) {
 	}
 	free(tmp);
 }
-
-// static int get_maxlen_links(t_list *lf) { //
-// 	int max = 0;
-// 	int countnum = 0;
-
-// 	for (t_list *q = lf; q != NULL; q = q->next) {
-// 		t_file tmp = q->data;
-// 		countnum = mx_strlen(mx_itoa(tmp->linls));
-// 		if (max < countnum) {
-// 			max = countnum;
-// 		}
-// 	}
-// 	return max;
-// }
-
-// static int get_maxlen_owner(t_list *lf) {
-// 	int max = 0;
-// 	int countnum = 0;
-
-// 	for (t_list *q = lf; q != NULL; q = q->next) {
-// 		t_file tmp = q->data;
-// 		countnum = mx_strlen(tmp->maxlen_owner);
-// 		if (max < countnum) {
-// 			max = countnum;
-// 		}
-// 	}
-// 	return max;
-// }
-
-// static int get_maxlen_group(t_list *lf) {
-// 	int max = 0;
-// 	int countnum = 0;
-
-// 	for (t_list *q = lf; q != NULL; q = q->next) {
-// 		t_file tmp = q->data;
-// 		countnum = mx_strlen(tmp->maxlen_group);
-// 		if (max < countnum) {
-// 			max = countnum;
-// 		}
-// 	}
-// 	return max;
-// }
-
-// static int get_maxlen_size(t_list *lf) { //
-// 	int max = 0;
-// 	int countnum = 0;
-
-// 	for (t_list *q = lf; q != NULL; q = q->next) {
-// 		t_file tmp = q->data;
-// 		countnum = mx_strlen(mx_itoa(tmp->maxlen_size));
-// 		if (max < countnum) {
-// 			max = countnum;
-// 		}
-// 	}
-// 	return max;
-// }

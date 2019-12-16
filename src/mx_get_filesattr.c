@@ -2,24 +2,27 @@
 
 static void get_mode(t_file *file, struct stat fs);
 static char get_acl(char *file);
-static void get_owner_group(t_file *file, struct stat fs, t_command *c);
-static void get_time(t_file *file, struct stat fs, t_command *c);
+static void get_owner_group(t_file *file, struct stat fs, t_cmd *c);
+static void get_time(t_file *file, struct stat fs, t_cmd *c);
 static void get_path(t_file *file, char *dir);
-static void get_size(t_file *file, struct stat fs);
 
-t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
-    t_file *file = malloc(sizeof(t_file));
+t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c) {
+    t_file *file = NULL;
 	struct stat fs;
 
-	stat(filename, &fs);
-	file->filename = filename;
+	if (!filename || !directory || !c)
+		return file;
+	file = malloc(sizeof(t_file));
+	// stat(filename, &fs);
+	file->filename = mx_strdup(filename);
 	get_path(file, directory);
     lstat(file->path, &fs);
+    file->ffs = fs;
 	file->blocks = fs.st_blocks;
 	get_mode(file, fs);
 	file->links = fs.st_nlink;
 	get_owner_group(file, fs, c);
-	get_size(file, fs);
+	file->size = fs.st_size;
 	get_time(file, fs, c);
     return file;
 }
@@ -27,6 +30,18 @@ t_file *mx_get_filesattr(char *filename, char *directory, t_command *c) {
 static void get_path(t_file *file, char *dir) {
     int len = mx_strlen(dir);
 	char *tmp = NULL;
+
+	if (!file || !dir)
+		return;
+	// if (file->filename[0] != '/') {
+    // 	tmp = mx_strjoin(dir, "/");
+	// 	file->path = mx_strjoin(tmp, file->filename);
+	// 	free(tmp);
+	// }
+	// else {
+    //     file->path = mx_strjoin(dir, file->filename + 1);
+    // }
+
 
 	if (dir[len - 1] != '/' && file->filename[0] != '/') {
     	tmp = mx_strjoin(dir, "/");
@@ -39,7 +54,6 @@ static void get_path(t_file *file, char *dir) {
 	}
 	else if (dir[len] == '/' && file->filename[0] == '/') {
         file->path = mx_strjoin(dir, file->filename + 1);
-        return;
     }
 }
 
@@ -66,26 +80,6 @@ static void get_mode(t_file *file, struct stat fs) {
 	file->mode = res;
 }
 
-static void get_size(t_file *file, struct stat fs) {
-	// char *major, *minor;
-
-	// if (S_ISBLK(fs.st_mode) || S_ISCHR(fs.st_mode)) {
-	// 	major = mx_itoa((fs.st_rdev >> 24) & 0xffffff);
-	// 	minor = mx_itoa(fs.st_rdev & 0xffffff);
-	// 	if((fs.st_rdev & 0xffffff) > 999) {
-	// 		minor = mx_nbr_to_hex(fs.st_rdev & 0xffffff);
-	// 		while (mx_strlen(minor) < 10) {
-	// 			minor = mx_strjoin("0", minor);
-	// 		}
-	// 		minor[1] = 'x';
-    // 	}
-	// 	mx_printstr(major);
-	// 	mx_printstr(minor);
-	// }
-	// else
-		file->size = fs.st_size;
-}
-
 static char get_acl(char *file) {
 	char character;
 	ssize_t xattr;
@@ -103,7 +97,7 @@ static char get_acl(char *file) {
     return character;
 }
 
-static void get_owner_group(t_file *file, struct stat fs, t_command *c) {
+static void get_owner_group(t_file *file, struct stat fs, t_cmd *c) {
     struct passwd *pw;
 	struct group *grp;
 	char *tmp;
@@ -126,7 +120,7 @@ static void get_owner_group(t_file *file, struct stat fs, t_command *c) {
 	}
 }
 
-static void get_time(t_file *file, struct stat fs, t_command *c) {
+static void get_time(t_file *file, struct stat fs, t_cmd *c) {
 	char *str = NULL;
     int len;
 

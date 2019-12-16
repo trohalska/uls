@@ -1,24 +1,17 @@
 #include "uls.h"
 
-static void mx_prepare_list_and_print(t_list *lf, t_command *c);
-static void print_directories(t_list *d_names, t_command *c);
-static void print_one_dir(char *dir, t_command *c);
+static void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
+static void print_directories(t_list *d_names, t_cmd *c);
+static void print_one_dir(char *dir, t_cmd *c);
 static t_list *mx_get_arg_f(int argc, char **argv, int p);
 static t_list *mx_get_arg_d(int argc, char **argv, int p);
 static bool strcmp_bool(void *d1, void *d2);
 
 int main(int argc, char **argv) {
 	int position = mx_check(argc, argv);
-	t_command *c = mx_create_command(argc, argv);
+	t_cmd *c = mx_create_command(argc, argv);
 	t_list *f_names = mx_get_arg_f(argc, argv, position);
 	t_list *d_names = mx_get_arg_d(argc, argv, position);
-
-	// mx_printstr(argv[1]);
-	// mx_printstr(" - v\n");
-	// if (f_names) mx_printlist(f_names); else mx_printstr("NULL");
-	// mx_printstr(" - f\n");
-	// if (d_names) mx_printlist(d_names); else mx_printstr("NULL");
-	// mx_printstr(" - d\n");
 
 	if (!f_names && !d_names && !c->error_null_args)
 		mx_push_back(&d_names, ".");
@@ -39,15 +32,13 @@ int main(int argc, char **argv) {
 		mx_printstr(":\n");
 	}
     print_directories(d_names, c);
-	mx_clear_list_new(&f_names);
-	mx_clear_list_new(&d_names);
 
-	// mx_printstr("\n\n");
+	// mx_printstr("\n----------------------------------------------------\n");
 	// system("leaks -q uls");
 	return 0;
 }
 
-static void print_directories(t_list *d_names, t_command *c) {
+static void print_directories(t_list *d_names, t_cmd *c) {
 	if (d_names) {
 		for (t_list *tmp = d_names; tmp; tmp = tmp->next) {
 			if (mx_list_size(d_names) != 1) {
@@ -62,49 +53,47 @@ static void print_directories(t_list *d_names, t_command *c) {
 	}
 }
 
-static void print_one_dir(char *dir, t_command *c) {
-	t_list *files_list = mx_get_files_list_dir(dir, c);
+static void print_one_dir(char *dir, t_cmd *c) {
+	t_list *files_list;
 	t_file *tmp;
 
-	// sort and filter
-    mx_prepare_list_and_print(files_list, c);
+	files_list = mx_get_files_list_dir(dir, c);
+	mx_prepare_list_and_print(files_list, c);
 	if (c->print_recursion) // recursion
 		for (t_list *q = files_list; q; q = q->next) {
-			if (mx_isdir(NULL, q)) {
-				tmp = q->data;
-				// if (!mx_strcmp(tmp->filename, ".") && !mx_strcmp(tmp->filename, "..")) { // ??????????????
-					mx_printstr("\n");
-					mx_printstr(tmp->path);
-					mx_printstr(":\n");
-					print_one_dir(tmp->path, c);
-				// }
+			tmp = q->data;
+			if (mx_isdir(NULL, q)
+				/*&& !mx_strcmp(tmp->filename, ".") && !mx_strcmp(tmp->filename, "..")*/) {
+				mx_printstr("\n");
+				mx_printstr(tmp->path);
+				mx_printstr(":\n");
+				print_one_dir(tmp->path, c);
 			}
 		}
-	mx_clear_files_list(&files_list);
+	mx_clear_filesattr_list(&files_list);
 }
 
-static void mx_prepare_list_and_print(t_list *lf, t_command *c) {
-    // files = flags->filter(files);
-    // if (!mx_list_size(files)) {
-    //     return;
-    // }
-    // flags->sort(files, flags->sort_functions);
-    // if (!mx_check_file_error(files->data)) {
-    //     flags->print(files);
-    // }
-    // else {
-    // print_error_file(files->data);
-    // }
+static void mx_prepare_list_and_print(t_list *lf, t_cmd *c) {
+	if (c->sort_type == sort_name || c->sort_type == sort_time)
+		mx_sort_uls_list(lf, c, mx_strcmp_names);
+		if (c->sort_type == sort_time) {
+			if (c->time_type == time_mtime)
+				mx_sort_uls_list(lf, c, mx_strcmp_mtime);
+			else if (c->time_type == time_atime)
+				mx_sort_uls_list(lf, c, mx_strcmp_atime);
+			else if (c->time_type == time_ctime)
+				mx_sort_uls_list(lf, c, mx_strcmp_ctime);
+		}
+	else if (c->sort_type == sort_size)
+		mx_sort_uls_list(lf, c, mx_strcmp_size);
 
-	if (c->print_func == long_format) {
+
+	if (c->print_func == long_format)
 		mx_print_long_format(lf, c);
-	}
-	else if (c->print_func == std_format) {
+	else if (c->print_func == std_format)
 		mx_print_std_format(lf);
-	}
-	else if (c->print_func == col_format) {
+	else if (c->print_func == col_format)
 		mx_print_col_format(lf);
-	}
 }
 
 static t_list *mx_get_arg_f(int argc, char **argv, int i) {

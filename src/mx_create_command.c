@@ -1,12 +1,12 @@
 #include "uls.h"
 
-static t_command *initiailze_default();
-static void print_and_filter_flags(char flag, t_command *c);
-// static void format_flags(char flag, t_command *c);
-// static void sort_and_time_flags(char flag, t_command *c);
+static t_cmd *initiailze_default();
+static void print_and_filter_flags(char flag, t_cmd *c);
+// static void format_flags(char flag, t_cmd *c);
+static void sort_and_time_flags(char flag, t_cmd *c);
 
-t_command *mx_create_command(int argc, char **argv) {
-	t_command *c = initiailze_default();
+t_cmd *mx_create_command(int argc, char **argv) {
+	t_cmd *c = initiailze_default();
 	int i = 1;
 
 	for (; i < argc; i++)
@@ -15,8 +15,8 @@ t_command *mx_create_command(int argc, char **argv) {
 				break;
 			for (int j = 1; j < mx_strlen(argv[i]); j++) {
 				print_and_filter_flags(argv[i][j], c);
+				sort_and_time_flags(argv[i][j], c);
 				// format_flags(argv[i][j], c);
-				// sort_and_time_flags(argv[i][j], c);
 			}
 		}
 		else
@@ -29,19 +29,21 @@ t_command *mx_create_command(int argc, char **argv) {
 	return c;
 }
 
-static t_command *initiailze_default() {
-	t_command *c = (t_command *)malloc(sizeof(t_command));
+static t_cmd *initiailze_default() {
+	t_cmd *c = (t_cmd *)malloc(sizeof(t_cmd));
 
 	//c->sort_func = mx_sort_name; // ---------------- сделать
 	if (isatty(STDOUT_FILENO))
 		c->print_func = std_format;
 	else
 		c->print_func = col_format;
+	c->sort_type = sort_name;
 	c->time_type = time_mtime;
 	c->error_null_args = false;
 	c->print_recursion = false;			// -R
+	c->print_reverse = false;			// -r
 	// c->print_hidden = false;			// -a
-	// c->print_reverse = false;		// -r
+
 	c->print_owner = true;				// -g
 	c->print_group = true;				// -o
 	c->print_owner_group_num = false;	// -n
@@ -53,7 +55,7 @@ static t_command *initiailze_default() {
 	return c;
 }
 
-static void print_and_filter_flags(char flag, t_command *c) {
+static void print_and_filter_flags(char flag, t_cmd *c) {
 	switch (flag) {
 		case 'l':
 			c->print_func = long_format;
@@ -79,7 +81,28 @@ static void print_and_filter_flags(char flag, t_command *c) {
 	}
 }
 
-// static void format_flags(char flag, t_command *c) {
+static void sort_and_time_flags(char flag, t_cmd *c) {
+	switch (flag) {
+		case 'r':	// Имена файлов сортируются реверсивно по имени/ c -t по времени (сначала старые)/ с -S по размеру (сначала маленькие)
+			c->print_reverse = true;
+			break;
+		case 't':	// Имена файлов сортируются по времени, default - mtime
+			if (c->sort_type != sort_size)
+				c->sort_type = sort_time;
+			break;
+		case 'S':	// Имена файлов сортируются по size, сначала большие
+			c->sort_type = sort_size;
+			break;
+		case 'c':	// create time
+			c->time_type = time_ctime;
+			break;
+		case 'u':	// access time
+			c->time_type = time_atime;
+			break;
+	}
+}
+
+// static void format_flags(char flag, t_cmd *c) {
 // 	switch (flag) {
 // 		case 'a':	// Вывести список всех файлов (в т.ч "." и "..")
 // 			c->print_hidden = true;
@@ -102,26 +125,6 @@ static void print_and_filter_flags(char flag, t_command *c) {
 // 	}
 // }
 
-// static void sort_and_time_flags(char flag, t_command *c) {
-// 	switch (flag) {
-// 		// case 't':	// Имена файлов сортируются по времени, default - mtime
-// 		// 	c->sort_func = mx_sort_time;
-// 		// 	break;
-// 		// case 'S':	// Имена файлов сортируются по времени
-// 		// 	c->sort_func = mx_sort_size;
-// 		// 	break;
-// 		case 'c':	// create time
-// 			c->time_type = time_ctime;
-// 			break;
-// 		case 'u':	// access time
-// 			c->time_type = time_atime;
-// 			break;
-// 	}
-// 		// sort_none = -1,	/* -U */
-//     	// sort_extension,	/* -X */
-//    		// sort_version,	/* -v */
-// }
-
 // -l	Вывод в длинном формате: перед именами файлов выдается режим доступа,
 // 		количество ссылок на файл, имена владельца и группы,
 // 		размер в байтах и время последней модификации (см. ниже).
@@ -138,7 +141,6 @@ static void print_and_filter_flags(char flag, t_command *c) {
 
 // ------------------ Командой ls обрабатываются следующие флаги: ----------------------------
 
-// -R	Рекурсивно обойти встретившиеся подкаталоги.
 // -d	Если аргумент является каталогом, то выводить только его имя, а не содержимое.
 // 		Часто используется с флагом -l для получения сведений о состоянии каталога.
 // -x	Вывод в несколько колонок с сортировкой по строкам.

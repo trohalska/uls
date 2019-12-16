@@ -17,25 +17,23 @@ int mx_check(int argc, char **argv) {
 }
 
 static int mx_check_flags(int argc, char **argv) {
-	char *ex = "CRglno1"; // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+	char *ex = ULS_FLAGS;
 	int len_ex = mx_strlen(ex);
 	int i = 1;
 
-	if (argc > 1) {
-		for (; i < argc; i++)
-			if (argv[1][0] == '-' && argv[i][0] == '-') {
-				if (mx_strcmp(argv[i], "--") == 0)
-					break;
-				for (int j = 1; j < mx_strlen(argv[i]); j++)
-					for (int k = 0; k < len_ex && argv[i][j] != ex[k]; k++)
-						if (k == len_ex - 1) {
-							print_error_flag(argv[i][j], ex);
-							exit(1);
-						}
-			}
-			else
+	for (; i < argc; i++)
+		if (argv[1][0] == '-' && argv[i][0] == '-') {
+			if (mx_strcmp(argv[i], "--") == 0)
 				break;
-	}
+			for (int j = 1; j < mx_strlen(argv[i]); j++)
+				for (int k = 0; k < len_ex && argv[i][j] != ex[k]; k++)
+					if (k == len_ex - 1) {
+						print_error_flag(argv[i][j], ex);
+						exit(1);
+					}
+		}
+		else
+			break;
 	return i;
 }
 

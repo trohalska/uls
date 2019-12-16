@@ -21,7 +21,7 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
-#define ULS_FLAGS "CRglno1"
+#define ULS_FLAGS "CRScglnortu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
 
 typedef struct s_uls {
 	void *data;
@@ -30,13 +30,14 @@ typedef struct s_uls {
 } t_uls;
 
 typedef struct s_file {
-	char *path;
-	char *filename; 	//d_name in readdir
-	blkcnt_t blocks; 	//-s flag
-	char *mode; 		//stat st_mode
-	int links; 			//stat st_ino
-    char *owner; 		//getpwuid(info.st_uid)
-	char *group;  		//getgrgid(info.st_uid)
+	char *path;			// = dir/filename
+	char *filename; 	// d_name in readdir
+	struct stat ffs; // stat
+	blkcnt_t blocks; 	// total --------------------(-s)
+	char *mode; 		// stat st_mode
+	int links; 			// stat st_ino
+    char *owner; 		// getpwuid(info.st_uid)
+	char *group;  		// getgrgid(info.st_uid)
 	size_t size; 		// stat st_size
 	// char *a_time; 		//-u flag
 	// char *m_time; 		//stat st_mtime
@@ -51,14 +52,17 @@ typedef struct s_maxlens_for_print {
 	int l_size;
 } t_maxlens_for_print;
 
-typedef struct s_command {
+typedef struct s_cmd {
 	int print_func;
+	int sort_type;
 	int time_type;
 
 	bool error_null_args; 		// if one of them NULL
 	bool print_recursion;		// -R
+	bool print_reverse;			// -r
+	// bool print_dots_folder;		// -A
 	// bool print_hidden;			// -a
-	// bool print_reverse;			// -r
+	// bool print_f				// enable -A, -a disable all sortings
 	bool print_owner;			// -g
 	bool print_group;			// -o
 	bool print_owner_group_num;	// -n
@@ -69,7 +73,7 @@ typedef struct s_command {
 	// bool format_T;				// -T
 
 
-} t_command;
+} t_cmd;
 
 enum e_time_type {
     time_mtime,			/* default */
@@ -77,29 +81,44 @@ enum e_time_type {
     time_atime			/* -u */
 };
 enum e_print_type {
-    long_format,
-    std_format,
-    col_format
+    long_format,		// -l
+    std_format,			// -C
+    col_format			// -1
+};
+
+enum sort_type{
+	sort_none,			// -f
+    sort_name,			/* default */
+    sort_size,			/* -S */
+    sort_time,			/* -t */
 };
 
 // -------------------------------- to mylibmx
 void mx_printspaces(int count);
-void mx_clear_list_new(t_list **list);
 void mx_clear_list(t_list **list);
-
+// void mx_reverse_list(t_list **list, void (*f_clear)(t_list **));
+t_list *mx_reverse_list(t_list **list);
 
 int mx_check(int argc, char **argv);
 bool mx_isdir(char *filename, t_list *q);
 bool mx_ishidden(char *filename, t_list *q);
-t_command *mx_create_command(int argc, char **argv); // получаешь комманду
-t_file *mx_get_filesattr(char *filename, char *directory, t_command *c);
-t_list *mx_get_files_list_dir(char *dir, t_command *c); // получаешь лист атрибутов содержимого директории
+t_cmd *mx_create_command(int argc, char **argv); // получаешь комманду
+t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c);
+t_list *mx_get_files_list_dir(char *dir, t_cmd *c); // получаешь лист атрибутов содержимого директории
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 
-void mx_print_long_format(t_list *lf, t_command *c);
+void mx_print_long_format(t_list *lf, t_cmd *c);
 void mx_print_std_format(t_list *lf); // ---------------rewrite
 void mx_print_col_format(t_list *lf);
 
-void mx_clear_files_list(t_list **fl);
+t_list *mx_sort_uls_list(t_list *list, t_cmd *c, bool (*cmp)(void *a, void *b, t_cmd *c));
+bool mx_strcmp_names(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_size(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_mtime(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_atime(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_ctime(void *d1, void *d2, t_cmd *c);
+
+
+void mx_clear_filesattr_list(t_list **fl);
 
 #endif

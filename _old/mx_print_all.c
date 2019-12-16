@@ -1,15 +1,15 @@
 #include "uls.h"
 
-static void mx_prepare_list_and_print(t_list *lf, t_command *c);
+static void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
 
-static void print_f_d(t_list *f_names, t_list *d_names, t_command *c);
-static void print_one_dir(t_list *lf, t_command *c);
+static void print_f_d(t_list *f_names, t_list *d_names, t_cmd *c);
+static void print_one_dir(t_list *lf, t_cmd *c);
 static t_list *mx_get_arg_f(int argc, char **argv);
 static t_list *mx_get_arg_d(int argc, char **argv);
 static bool strcmp_bool(void *d1, void *d2);
 
-void mx_print_all(int argc, char **argv, t_command *c)
-{ 
+void mx_print_all(int argc, char **argv, t_cmd *c)
+{
 	t_list *f_names = mx_get_arg_f(argc, argv);
 	t_list *d_names = mx_get_arg_d(argc, argv);
 
@@ -22,7 +22,7 @@ void mx_print_all(int argc, char **argv, t_command *c)
 	// рекурсия?
 }
 
-static void print_one_dir(t_list *lf, t_command *c) {
+static void print_one_dir(t_list *lf, t_cmd *c) {
     blkcnt_t res = 0;
 
     for (t_list *q = lf; q != NULL; q = q->next) {
@@ -32,7 +32,7 @@ static void print_one_dir(t_list *lf, t_command *c) {
     mx_prepare_list_and_print(lf, c);
 }
 
-static void mx_prepare_list_and_print(t_list *lf, t_command *c) {
+static void mx_prepare_list_and_print(t_list *lf, t_cmd *c) {
     // files = flags->filter(files);
     // if (!mx_list_size(files)) {
     //     return;
@@ -54,7 +54,7 @@ static void mx_prepare_list_and_print(t_list *lf, t_command *c) {
 }
 
 
-static void print_f_d(t_list *f_names, t_list *d_names, t_command *c)
+static void print_f_d(t_list *f_names, t_list *d_names, t_cmd *c)
 {
 	if (f_names) {
         mx_prepare_list_and_print(mx_get_files_list(f_names, ".", c), c);
@@ -96,7 +96,7 @@ static t_list *mx_get_arg_d(int argc, char **argv)
 	while (argv[i] && argv[i][0] == '-')
 		i++;
 	for (; i < argc; i++)
-		if (mx_isdir(argv[i], NULL)) 
+		if (mx_isdir(argv[i], NULL))
 			mx_push_back(&d_argv, argv[i]);
 	mx_sort_list(d_argv, strcmp_bool);
 	return d_argv;
