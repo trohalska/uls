@@ -16,11 +16,20 @@ void mx_print_time(t_file *file, t_cmd *c) {
 }
 
 static void print_specific_time(time_t t) {
-    char *str = NULL;
-    char *result;
+    char *temp_time = ctime(&t);
+    char *result = mx_strnew(12);
+    time_t now = time(NULL);
 
-    str = ctime(&t);
-    result = mx_strncpy(mx_strnew(12), str + 4, 12);
-    mx_printstr(result);
-    free(result);
+    if ((now - 15778463) > t || now < t) {
+        result = mx_strncpy(result, temp_time + 4, 6);
+        mx_strcpy(result + 6, "  ");
+        mx_strncpy(result + 8, temp_time + 20, 4);
+        mx_printstr(result);
+        free(result);
+    }
+    else {
+        result = mx_strncpy(result, temp_time + 4, 12);
+        mx_printstr(result);
+        free(result);
+    }
 }

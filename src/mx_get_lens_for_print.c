@@ -7,7 +7,7 @@ static void compare_numb(int *max, int numb);
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf) {
 	t_maxlens_for_print *len;
 	t_file *tmp;
-	// bool majorminor = false;
+	bool majorminor = false;
 
 	if(!lf)
 		return NULL;
@@ -19,11 +19,11 @@ t_maxlens_for_print *mx_get_lens_for_print(t_list *lf) {
 		compare_str(&len->l_owner, tmp->owner);
 		compare_str(&len->l_group, tmp->group);
 		compare_numb(&len->l_size, tmp->ffs.st_size);
-		// if (S_ISBLK(tmp->ffs.st_mode) || S_ISCHR(tmp->ffs.st_mode))
-		// 	majorminor = true;
+		if (S_ISBLK(tmp->ffs.st_mode) || S_ISCHR(tmp->ffs.st_mode))
+			majorminor = true;
 	}
-	// if (majorminor)
-	// 	len->l_size = len->l_size < 8 ? 8 : len->l_size;
+	if (majorminor)
+		len->l_size = len->l_size < 8 ? 8 : len->l_size;
 	return len;
 }
 

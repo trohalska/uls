@@ -8,10 +8,8 @@ void mx_print_long_format(t_list *lf, t_cmd *c) {
     if (!lf || !c)
         return;
     ml = mx_get_lens_for_print(lf);
-    for (t_list *q = lf; q; q = q->next) {
-        // --------------- if (!mx_isdir(NULL, q) && !mx_ishidden(NULL, q))
-            print_line(q->data, ml, c);
-    }
+    for (t_list *q = lf; q; q = q->next)
+        print_line(q->data, ml, c);
     free(ml);
     ml = NULL;
 }
@@ -32,7 +30,7 @@ static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
         mx_printspaces(ml->l_group - mx_strlen(file->group));
     }
     mx_printspaces(2);
-    mx_print_size(file, ml); // ------- fix
+    mx_print_size(file, ml, c);
     mx_printspaces(1);
     mx_print_time(file, c);
     mx_printspaces(1);

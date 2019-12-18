@@ -21,7 +21,7 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
-#define ULS_FLAGS "ACRSacfglnortu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+#define ULS_FLAGS "ACRSacfghlnortu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
 
 typedef struct s_uls {
 	void *data;
@@ -61,7 +61,7 @@ typedef struct s_cmd {
 	bool print_group;			// -o
 	bool print_owner_group_num;	// -n
 
-	// bool format_h;				// -h
+	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
 	// bool format_T;				// -T
@@ -108,7 +108,8 @@ void mx_print_col_format(t_list *lf);
 void mx_print_permissions(t_file *file);
 void mx_print_acl(char *file);
 void mx_print_nlink(t_file *file, t_maxlens_for_print *ml);
-void mx_print_size(t_file *file, t_maxlens_for_print *ml);
+void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
+char *mx_human_read_size(off_t st_size);
 void mx_print_time(t_file *file, t_cmd *c);
 void mx_print_linkname(t_file *file);
 

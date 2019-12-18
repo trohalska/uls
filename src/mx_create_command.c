@@ -122,9 +122,9 @@ static void format_flags(char flag, t_cmd *c) {
 		case 'f':
 			c->print_f = true;
 			break;
-		// case 'h':	// print sizes in human readable form
-		// 	c->format_h = true;
-		// 	break;
+		case 'h':	// print sizes in human readable form
+			c->format_h = true;
+			break;
 		// case '@':	// display extended attribute keys and sizes in long (-l) output
 		// 	c->format_at_symbol = true;
 		// 	break;

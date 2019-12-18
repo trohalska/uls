@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "uls.h": "c",
-        "libmx.h": "c"
+        "libmx.h": "c",
+        "sstream": "c",
+        "chrono": "c"
     }
 }
