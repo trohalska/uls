@@ -22,10 +22,8 @@ void mx_clear_filesattr(t_file *file) { // попробовать без мал�
         return;
     mx_strdel(&file->path);
     mx_strdel(&file->filename);
-    mx_strdel(&file->mode);
     mx_strdel(&file->owner);
     mx_strdel(&file->group);
-    mx_strdel(&file->time);
     free(file);
     file = NULL;
 }

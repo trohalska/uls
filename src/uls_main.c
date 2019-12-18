@@ -3,6 +3,7 @@
 static void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
 static void print_directories(t_list *d_names, t_cmd *c);
 static void print_one_dir(char *dir, t_cmd *c);
+static void print_total(t_list *lf);
 static t_list *mx_get_arg_f(int argc, char **argv, int p);
 static t_list *mx_get_arg_d(int argc, char **argv, int p);
 static bool strcmp_bool(void *d1, void *d2);
@@ -26,8 +27,7 @@ int main(int argc, char **argv) {
             mx_printstr("\n");
     }
 
-	if ((f_names && d_names)
-		/*|| (argc - position - mx_list_size(f_names) - mx_list_size(d_names)) != 0*/) {
+	if (f_names && d_names) {
 		mx_printstr(d_names->data);
 		mx_printstr(":\n");
 	}
@@ -63,7 +63,7 @@ static void print_one_dir(char *dir, t_cmd *c) {
 		for (t_list *q = files_list; q; q = q->next) {
 			tmp = q->data;
 			if (mx_isdir(NULL, q)
-				/*&& !mx_strcmp(tmp->filename, ".") && !mx_strcmp(tmp->filename, "..")*/) {
+			&& strcmp(tmp->filename, ".") && strcmp(tmp->filename, "..")) {
 				mx_printstr("\n");
 				mx_printstr(tmp->path);
 				mx_printstr(":\n");
@@ -71,6 +71,19 @@ static void print_one_dir(char *dir, t_cmd *c) {
 			}
 		}
 	mx_clear_filesattr_list(&files_list);
+}
+
+static void print_total(t_list *lf) {
+    blkcnt_t res = 0;
+    t_file *tmp;
+
+    for (t_list *q = lf; q != NULL; q = q->next) {
+        tmp = q->data;
+        res += tmp->ffs.st_blocks;
+    }
+    mx_printstr("total ");
+    mx_printint((int)res);
+    mx_printstr("\n");
 }
 
 static void mx_prepare_list_and_print(t_list *lf, t_cmd *c) {
@@ -87,9 +100,10 @@ static void mx_prepare_list_and_print(t_list *lf, t_cmd *c) {
 	else if (c->sort_type == sort_size)
 		mx_sort_uls_list(lf, c, mx_strcmp_size);
 
-
-	if (c->print_func == long_format)
+	if (c->print_func == long_format) {
+		print_total(lf);
 		mx_print_long_format(lf, c);
+	}
 	else if (c->print_func == std_format)
 		mx_print_std_format(lf);
 	else if (c->print_func == col_format)

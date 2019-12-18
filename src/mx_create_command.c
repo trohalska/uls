@@ -2,7 +2,7 @@
 
 static t_cmd *initiailze_default();
 static void print_and_filter_flags(char flag, t_cmd *c);
-// static void format_flags(char flag, t_cmd *c);
+static void format_flags(char flag, t_cmd *c);
 static void sort_and_time_flags(char flag, t_cmd *c);
 
 t_cmd *mx_create_command(int argc, char **argv) {
@@ -16,7 +16,7 @@ t_cmd *mx_create_command(int argc, char **argv) {
 			for (int j = 1; j < mx_strlen(argv[i]); j++) {
 				print_and_filter_flags(argv[i][j], c);
 				sort_and_time_flags(argv[i][j], c);
-				// format_flags(argv[i][j], c);
+				format_flags(argv[i][j], c);
 			}
 		}
 		else
@@ -26,6 +26,11 @@ t_cmd *mx_create_command(int argc, char **argv) {
 			c->error_null_args = true;
 			break;
 		}
+	if (c->print_f == true) {
+		c->print_dots_folder = true;
+		c->print_hidden = true;
+		c->sort_type = sort_none;
+	}
 	return c;
 }
 
@@ -39,10 +44,14 @@ static t_cmd *initiailze_default() {
 		c->print_func = col_format;
 	c->sort_type = sort_name;
 	c->time_type = time_mtime;
+
 	c->error_null_args = false;
 	c->print_recursion = false;			// -R
 	c->print_reverse = false;			// -r
-	// c->print_hidden = false;			// -a
+
+	c->print_dots_folder = false;		// -A
+	c->print_hidden = false;			// -a
+	c->print_f = false;					// -f
 
 	c->print_owner = true;				// -g
 	c->print_group = true;				// -o
@@ -102,28 +111,31 @@ static void sort_and_time_flags(char flag, t_cmd *c) {
 	}
 }
 
-// static void format_flags(char flag, t_cmd *c) {
-// 	switch (flag) {
-// 		case 'a':	// Вывести список всех файлов (в т.ч "." и "..")
-// 			c->print_hidden = true;
-// 			break;
-// 		case 'r':	// reverse sort order
-// 			c->print_reverse = true;
-// 			break;
-// 		case 'h':	// print sizes in human readable form
-// 			c->format_h = true;
-// 			break;
-// 		case '@':	// display extended attribute keys and sizes in long (-l) output
-// 			c->format_at_symbol = true;
-// 			break;
-// 		// case 'e':	// ???
-// 		// 	c->format_e = true;
-// 		// 	break;
-// 		case 'T':	// show complete time information
-// 			c->format_T = true;
-// 			break;
-// 	}
-// }
+static void format_flags(char flag, t_cmd *c) {
+	switch (flag) {
+		case 'a':	// Вывести список всех файлов (в т.ч "." и "..")
+			c->print_hidden = true;
+			break;
+		case 'A':	// Вывести список всех скрытых файлов (".")
+			c->print_dots_folder = true;
+			break;
+		case 'f':
+			c->print_f = true;
+			break;
+		// case 'h':	// print sizes in human readable form
+		// 	c->format_h = true;
+		// 	break;
+		// case '@':	// display extended attribute keys and sizes in long (-l) output
+		// 	c->format_at_symbol = true;
+		// 	break;
+		// case 'e':	// ???
+		// 	c->format_e = true;
+		// 	break;
+		// case 'T':	// show complete time information
+		// 	c->format_T = true;
+		// 	break;
+	}
+}
 
 // -l	Вывод в длинном формате: перед именами файлов выдается режим доступа,
 // 		количество ссылок на файл, имена владельца и группы,

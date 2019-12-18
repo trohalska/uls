@@ -1,3 +1,95 @@
-echo ---------- user vs test
 
-diff <(./uls $1 $2 $3 $4 $5 $6) <(ls $1 $2 $3 $4 $5 $6)
+echo ------------- ERRORS -------------
+
+echo Test: ls --
+diff <(ls --) <(./uls --)
+
+echo Test: ls xxx
+diff <(ls xxx) <(./uls xxx)
+
+echo Test: ls -- -l
+diff <(ls -- -l) <(./uls -- -l)
+
+echo Test: ls -- libmx
+diff <(ls -- libmx) <(./uls -- libmx)
+
+echo Test: -- xxx libmx
+diff <(ls -- xxx libmx) <(./uls -- xxx libmx)
+
+echo Test: -- xxx libmx -l
+diff <(ls xxx libmx -l) <(./uls xxx libmx -l)
+
+echo ------------- Without flags -------------
+
+echo Test: ls
+diff <(ls) <(./uls)
+
+echo Test: ls libmx
+diff <(ls libmx) <(./uls libmx)
+
+echo Test: ls Makefile
+diff <(ls Makefile) <(./uls Makefile)
+
+echo Test: ls libmx Makefile
+diff <(ls libmx Makefile) <(./uls libmx Makefile)
+
+echo ------------- Flag -l -------------
+
+echo Test: ls -l
+diff -q <(ls -l) <(./uls -l)
+
+echo Test: ls -l libmx
+diff -q <(ls -l libmx) <(./uls -l libmx)
+
+echo Test: ls -l /dev
+diff -q <(ls -l /dev) <(./uls -l /dev)
+
+echo Test: ls -l /dev/null
+diff -q <(ls -l /dev/null) <(./uls -l /dev/null)
+
+echo Test: ls -l /usr/bin
+diff -q <(ls -l /usr/bin) <(./uls -l /usr/bin)
+
+echo ------------- links -------------
+
+ln -s libmx link1
+ln -s Makefile link2
+
+echo Test: ls -l
+diff -q <(ls -l) <(./uls -l)
+
+echo Test: ls link1
+diff -q <(ls link1) <(./uls link1)
+
+echo Test: ls link2
+diff -q <(ls link2) <(./uls link2)
+
+echo Test: ls -l link1
+diff -q <(ls -l link1) <(./uls -l link1)
+
+echo Test: ls -l link2
+diff -q <(ls link1) <(./uls link1)
+
+echo ------------- Attr @ and ACL + -------------
+
+echo Test: ls -l
+diff -q <(ls -l) <(./uls -l)
+
+echo Test: ls -l /Users/
+diff -q <(ls -l /Users/) <(./uls -l /Users/)
+
+
+
+
+
+
+
+
+
+
+
+
+
+echo add system "leaks -q uls" in main
+
+diff <(ls $1 $2 $3 $4 $5 $6) <(./uls $1 $2 $3 $4 $5 $6)
