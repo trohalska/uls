@@ -61,8 +61,9 @@ static void print_filesnames(char **names, int size, int max, int cols) {
         for (int j = 0; i + j < size; j += rows) {
             mx_printstr(names[i + j]);
             if (mx_strlen(names[i + j]) < max)
-                mx_printspaces(max - mx_strlen(names[i + j]));
-                mx_printchar('\t');
+                for (int m = 0; m < (max - mx_strlen(names[i + j])); m++)
+                // mx_printspaces(max - mx_strlen(names[i + j]));
+                    mx_printchar('\t');
         }
         mx_printchar('\n');
     }

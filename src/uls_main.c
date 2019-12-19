@@ -7,7 +7,7 @@ static void print_one_dir(char *dir, t_cmd *c);
 int main(int argc, char **argv) {
 	int position = mx_check(argc, argv);
 	t_cmd *c = mx_create_command(argc, argv);
-
+	mx_printstr("false\n");
 
 	// if(c->error_null_args == true) mx_printstr("true\n");
 	// else mx_printstr("false\n");

@@ -9,8 +9,8 @@ t_cmd *mx_create_command(int argc, char **argv) {
 	t_cmd *c = initiailze_default();
 	int i = 1;
 
-	for (; i < argc && argv[i] && argv[i][0] == '-'; i++)
-		// if (argv[i] && argv[i][0] == '-') {
+	for (; i < argc; i++)
+		if (argv[i] && argv[i][0] == '-') {
 			if (mx_strcmp(argv[i], "--") == 0)
 				break;
 			for (int j = 1; j < mx_strlen(argv[i]); j++) {
@@ -18,9 +18,9 @@ t_cmd *mx_create_command(int argc, char **argv) {
 				sort_and_time_flags(argv[i][j], c);
 				format_flags(argv[i][j], c);
 			}
-		// }
-		// else
-		// 	break;
+		}
+		else
+			break;
 	for (; i < argc; i++)
 		if (!argv[i]) {
 			c->error_null_args = true;
