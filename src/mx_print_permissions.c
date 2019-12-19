@@ -1,7 +1,7 @@
 #include "uls.h"
 
 void mx_print_permissions(t_file *file) {
-    char res[11];
+    char *res = mx_strnew(10);
 
     res[0] = S_ISBLK(file->ffs.st_mode) ? 'b' : \
              S_ISCHR(file->ffs.st_mode) ? 'c' : \
@@ -11,14 +11,24 @@ void mx_print_permissions(t_file *file) {
              S_ISLNK(file->ffs.st_mode) ? 'l' : '-';
     res[1] = (S_IRUSR & file->ffs.st_mode) ? 'r' : '-';
     res[2] = (S_IWUSR & file->ffs.st_mode) ? 'w' : '-';
-    res[3] = (S_IXUSR & file->ffs.st_mode) ? 'x' : '-';
+    res[3] = (file->ffs.st_mode & S_IXUSR) ?
+            ((file->ffs.st_mode & S_ISUID) ? 's' : 'x') :
+            ((file->ffs.st_mode & S_ISUID) ? 'S' : '-');
+
     res[4] = (S_IRGRP & file->ffs.st_mode) ? 'r' : '-';
     res[5] = (S_IWGRP & file->ffs.st_mode) ? 'w' : '-';
-    res[6] = (S_IXGRP & file->ffs.st_mode) ? 'x' : '-';
+
+    res[6] = (file->ffs.st_mode & S_IXGRP) ?
+            ((file->ffs.st_mode & S_ISGID) ? 's' : 'x') :
+            ((file->ffs.st_mode & S_ISGID) ? 'S' : '-');
+
     res[7] = (S_IROTH & file->ffs.st_mode) ? 'r' : '-';
     res[8] = (S_IWOTH & file->ffs.st_mode) ? 'w' : '-';
-    res[9] = (S_ISTXT & file->ffs.st_mode) ? 't' : \
-             (S_IXOTH & file->ffs.st_mode) ? 'x' : '-';
-    res[10] = '\0';
+
+    res[9] = (file->ffs.st_mode & S_IXOTH) ?
+            ((file->ffs.st_mode & S_ISTXT) ? 't' : 'x') :
+            ((file->ffs.st_mode & S_ISTXT) ? 'T' : '-');
+
     mx_printstr(res);
+    free(res);
 }

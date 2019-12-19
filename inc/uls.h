@@ -21,8 +21,6 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
-#define ULS_FLAGS "ARSacfghlmnorstu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
-// -C
 
 
 typedef struct s_uls {

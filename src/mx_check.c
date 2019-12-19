@@ -19,8 +19,10 @@ int mx_check(int argc, char **argv) {
 	return position;
 }
 
+// [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+
 static int mx_check_flags(int argc, char **argv) {
-	char *ex = ULS_FLAGS;
+	char *ex = "ACRSacfghlmnorstu1";
 	int len_ex = mx_strlen(ex);
 	int i = 1;
 

@@ -24,8 +24,8 @@ echo --------------------------------------- Without flags
 echo Test: ls
 diff <(ls) <(./uls)
 
-#echo Test: ls -C
-#diff <(ls -C) <(./uls -C)
+echo Test: ls -C
+diff -q <(ls -C) <(./uls -C)
 
 echo Test: ls | cat -e
 diff <(ls | cat -e) <(./uls | cat -e)

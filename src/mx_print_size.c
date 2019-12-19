@@ -1,6 +1,7 @@
 #include "uls.h"
 
 static void major_minor(t_file *file);
+static char *get_minor(int tmp);
 static void kostyl_minor(t_file *file, int *c);
 
 void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
@@ -35,19 +36,8 @@ static void major_minor(t_file *file) {
     major = mx_itoa((file->ffs.st_rdev >> 24) & 0xffffff);
     tmp = (file->ffs.st_rdev & 0xffffff);
     if (file->filename[0] == 'a' || file->filename[0] == 'd')
-        //  mx_printint(mx_strncmp(file->filename, "autofs_homedirmounter", 21));
-        // mx_printstr(file->filename);
         kostyl_minor(file, &tmp);
-    if(tmp > 127) {
-        minor = mx_nbr_to_hex(tmp);
-        while (mx_strlen(minor) < 10) {
-            minor = mx_strjoin("0", minor);
-        }
-        minor[1] = 'x';
-    }
-    else
-        minor = mx_itoa(tmp);
-
+    minor = get_minor(tmp);
     mx_printspaces(3 - mx_strlen(major));
     mx_printstr(major);
     mx_printstr(", ");
@@ -65,4 +55,20 @@ static void kostyl_minor(t_file *file, int *c) {
         *c = *c - 3;
     }
     else return;
+}
+
+static char *get_minor(int minornum) {
+    char *minor;
+    char *tmp = NULL;
+
+    if (minornum > 127) {
+        minor = mx_strnew(10);
+        mx_strcpy(minor, "0x00000000");
+        tmp = mx_nbr_to_hex(minornum);
+        mx_strcpy(minor + (10 - mx_strlen(tmp)), tmp);
+        free(tmp);
+    }
+    else
+        minor = mx_itoa(minornum);
+    return minor;
 }
