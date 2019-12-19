@@ -6,17 +6,16 @@ static void mx_check_arguments(int argc, char **argv, int p);
 static void print_error_arguments(char *v);
 
 int mx_check(int argc, char **argv) {
-	int j, position = mx_check_flags(argc, argv);
+	int position = mx_check_flags(argc, argv);
 
 	if (argv[position] && mx_strcmp(argv[position], "--") == 0)
 		position++;
 
-	for (j = position; j < argc; j++)
+	for (int j = position; j < argc; j++)
 		if (argv[j][0] == '-')
 			mx_check_arguments(1, &argv[j], 0);
 
 	mx_check_arguments(argc, argv, position);
-
 	return position;
 }
 
@@ -53,11 +52,10 @@ static void mx_check_arguments(int argc, char **argv, int p) {
     struct stat buff;
 
     for (int i = p; i < argc; i++) {
-    	if (argv[i])
-	        if (lstat(argv[i], &buff) != 0) {
-	            print_error_arguments(argv[i]);
-	            argv[i] = NULL;
-	        }
+        if (argv[i] && (lstat(argv[i], &buff) != 0)) {
+            print_error_arguments(argv[i]);
+            argv[i] = NULL;
+        }
 	}
 }
 

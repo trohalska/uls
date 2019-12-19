@@ -38,7 +38,7 @@ static void major_minor(t_file *file) {
         //  mx_printint(mx_strncmp(file->filename, "autofs_homedirmounter", 21));
         // mx_printstr(file->filename);
         kostyl_minor(file, &tmp);
-    if(tmp > 999) {
+    if(tmp > 127) {
         minor = mx_nbr_to_hex(tmp);
         while (mx_strlen(minor) < 10) {
             minor = mx_strjoin("0", minor);

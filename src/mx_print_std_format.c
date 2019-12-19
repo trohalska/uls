@@ -4,6 +4,7 @@ static int get_maxlen_name(t_list *lf);
 static char **get_names(t_list *list, int size);
 static void print_filesnames(char **names, int size, int max, int rows);
 static void print_filesnames_isatty(char **names, int size, int max, int cols);
+static void mx_print_tab(int count);
 
 void mx_print_std_format(t_list *lf) {
     int maxlencol = get_maxlen_name(lf);
@@ -12,7 +13,7 @@ void mx_print_std_format(t_list *lf) {
     int cols;
     struct winsize win;
 
-    if (!lf)
+    if (!lf || !names)
         return;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
     cols = win.ws_col / (maxlencol + 8);
@@ -51,7 +52,6 @@ static char **get_names(t_list *list, int size) {
 
 static void print_filesnames(char **names, int size, int max, int cols) {
     int rows;
-
     if (!names || !size || !cols || !max)
         return;
     rows = size / cols;
@@ -60,10 +60,10 @@ static void print_filesnames(char **names, int size, int max, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; i + j < size; j += rows) {
             mx_printstr(names[i + j]);
-            if (mx_strlen(names[i + j]) < max)
-                for (int m = 0; m < (max - mx_strlen(names[i + j])); m++)
-                // mx_printspaces(max - mx_strlen(names[i + j]));
-                    mx_printchar('\t');
+            // if (mx_strlen(names[i + j]) < max)
+                // mx_print_tab(max - mx_strlen(names[i + j]));
+            mx_printspaces(max - mx_strlen(names[i + j]));
+            mx_printchar('\t');
         }
         mx_printchar('\n');
     }
@@ -71,7 +71,6 @@ static void print_filesnames(char **names, int size, int max, int cols) {
 
 static void print_filesnames_isatty(char **names, int size, int max, int cols) {
     int rows;
-
     if (!names || !size || !cols || !max)
         return;
     rows = size / cols;
@@ -80,11 +79,17 @@ static void print_filesnames_isatty(char **names, int size, int max, int cols) {
     for (int i = 0; i < size; i += 2) {
         mx_printstr(names[i]);
         if (names[i + 1]) {
-            if (mx_strlen(names[i]) < max)
-                mx_printspaces(max - mx_strlen(names[i]));
+            if (mx_strlen(names[i]) < max - 1)
+                mx_print_tab(max - mx_strlen(names[i]));
             mx_printchar('\t');
             mx_printstr(names[i+1]);
         }
         mx_printchar('\n');
     }
+}
+
+static void mx_print_tab(int count) {
+    if (count > 0)
+        for (int i = 0; i < count; i += 8)
+            mx_printchar('\t');
 }

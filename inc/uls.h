@@ -21,7 +21,9 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
-#define ULS_FLAGS "ACRSacfghlmnorstu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+#define ULS_FLAGS "ARSacfghlmnorstu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+// -C
+
 
 typedef struct s_uls {
 	void *data;
@@ -60,7 +62,7 @@ typedef struct s_cmd {
 	bool print_owner;			// -g
 	bool print_group;			// -o
 	bool print_owner_group_num;	// -n
-	bool print_blocks;			// -s
+	// bool print_blocks;			// -s
 
 	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
@@ -93,13 +95,14 @@ void mx_printspaces(int count);
 void mx_clear_list(t_list **list);
 
 bool mx_isdir(char *filename, t_list *q);
-bool mx_islink(char *filename, t_list *q);
+int mx_islink(char *filename, t_list *q);
+// 0 - not link, 1 - link to file, 5 - link to folder
 bool mx_ishidden(char *filename, t_list *q);
 
 int mx_check(int argc, char **argv);
 t_cmd *mx_create_command(int argc, char **argv);
-t_list *mx_get_arg_f(int argc, char **argv, int i);
-t_list *mx_get_arg_d(int argc, char **argv, int i);
+t_list *mx_get_arg_f(int argc, char **argv, int i, t_cmd *c);
+t_list *mx_get_arg_d(int argc, char **argv, int i, t_cmd *c);
 bool mx_strcmp_f_d_bool(void *d1, void *d2);
 t_list *mx_get_files_list_dir(char *dir, t_cmd *c);
 t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c);

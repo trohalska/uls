@@ -5,6 +5,8 @@ t_list *mx_get_files_list_dir(char *dir, t_cmd *c) {
     DIR *directory;
     struct dirent *entry;
 
+    if(!dir || !c)
+        return NULL;
     if (!(directory = opendir(dir))) {
         int i = mx_strlen(dir) - 1;
 

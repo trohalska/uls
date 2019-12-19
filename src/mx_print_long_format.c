@@ -17,11 +17,6 @@ void mx_print_long_format(t_list *lf, t_cmd *c) {
 static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     if (!file || !ml || !c)
         return;
-    if (c->print_blocks) {
-        
-        
-    }
-
     mx_print_permissions(file);
     mx_print_acl(file->path);
     mx_print_nlink(file, ml);

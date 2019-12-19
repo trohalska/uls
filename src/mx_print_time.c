@@ -33,11 +33,3 @@ static void print_specific_time(time_t t) {
         free(result);
     }
 }
-
-// static void print_specific_time_T(time_t t) {
-//     char *temp_time = ctime(&t);
-//     char *result = mx_strnew(20);
-//     result = mx_strncpy(result, temp_time + 4, 20);
-//     mx_printstr(result);
-//     free(result);
-// }

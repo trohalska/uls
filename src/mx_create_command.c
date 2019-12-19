@@ -56,7 +56,7 @@ static t_cmd *initiailze_default() {
 	c->print_owner = true;				// -g
 	c->print_group = true;				// -o
 	c->print_owner_group_num = false;	// -n
-	c->print_blocks = false;			// -s
+	// c->print_blocks = false;			// -s
 
 	c->format_h = false;				// -h
 	// c->format_at_symbol = false;		// -@
@@ -71,8 +71,9 @@ static void print_and_filter_flags(char flag, t_cmd *c) {
 		case 'l':
 			c->print_func = long_format;
 			break;
-		case 'C':
-			c->print_func = std_format;
+		case 'C':	// Вывод в несколько колонок с сортировкой по колонкам.
+			if (c->print_func != m_format)
+				c->print_func = std_format;
 			break;
 		case '1':
 			c->print_func = col_format;
@@ -80,7 +81,7 @@ static void print_and_filter_flags(char flag, t_cmd *c) {
 		case 'm':
 			c->print_func = m_format;
 			break;
-		case 'R':	// -R list subdirectories recursively
+		case 'R':
 			c->print_recursion = true;
 			break;
 		case 'g':	// -l, id владельца не выводится.
@@ -127,9 +128,6 @@ static void format_flags(char flag, t_cmd *c) {
 		case 'f':
 			c->print_f = true;
 			break;
-		case 's':
-			c->print_blocks = true; // display size of each file in blocks
-			break;
 		case 'h':	// print sizes in human readable form
 			c->format_h = true;
 			break;
@@ -171,19 +169,30 @@ static void format_flags(char flag, t_cmd *c) {
 // -b	Выдавать непечатаемые символы, входящие в имя файла, в восьмеричном виде (\ddd).
 // -q	Выдавать непечатаемые символы, входящие в имя файла, в виде символа ?.
 // -i	Выдавать в первой колонке номера описателей файлов.
+// -s	Выдавать размер файлов в блоках (включая косвенные блоки).
+// -f	Рассматривать каждый аргумент как каталог и выводить его содержимое.
+// 		Этот флаг отменяет флаги -l, -t, -s, -r и включает флаг -a.
+// 		Сортировка имен файлов не производится; имена выдаются в таком порядке,
+// 		в каком они перечислены в каталоге.
+
 
 // typedef enum e_flag { // 33 flags:
+// A, //  -A  -- list all except . and ..
 // B, //  -B  -- print octal escapes for control characters
 // F, //  -F  -- append file type indicators
 // H, //  -H  -- follow symlinks on the command line
 // L, //  -L  -- list referenced file for sym link
 // P, //  -P  -- do not follow symlinks
+// R, //  -R  -- list subdirectories recursively
 // b, //  -b  -- as -B, but use C escape codes whenever possible
 // d, //  -d  -- list directory entries instead of contents
+// f, //  -f  -- output is not sorted
 // i, //  -i  -- print file inode numbers
 // k, //  -k  -- print sizes of 1k
+// m, //  -m  -- comma separated
 // p, //  -p  -- append file type indicators for directory
 // q, //  -q  -- hide control chars
+// s, //  -s  -- display size of each file in blocks
 // w, //  -w  -- print raw characters
 // x, //  -x  -- sort horizontally
 // } t_flag;
