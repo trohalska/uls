@@ -250,3 +250,5 @@ echo Test: ls -lR /Users/login
 echo --------------------------------------- memory leeks
 
 echo add system "leaks -q uls" in main
+
+rm -rf link1 link2
