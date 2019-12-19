@@ -21,7 +21,7 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
-#define ULS_FLAGS "ACRSacfghlnortu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
+#define ULS_FLAGS "ACRSacfghlmnorstu1" // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
 
 typedef struct s_uls {
 	void *data;
@@ -60,13 +60,12 @@ typedef struct s_cmd {
 	bool print_owner;			// -g
 	bool print_group;			// -o
 	bool print_owner_group_num;	// -n
+	bool print_blocks;			// -s
 
 	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
 	// bool format_T;				// -T
-
-
 } t_cmd;
 
 enum e_time_type {
@@ -74,10 +73,12 @@ enum e_time_type {
     time_ctime,			/* -c */
     time_atime			/* -u */
 };
+
 enum e_print_type {
     long_format,		// -l
     std_format,			// -C
-    col_format			// -1
+    col_format,			// -1
+    m_format 			// -m
 };
 
 enum sort_type{
@@ -91,20 +92,27 @@ enum sort_type{
 void mx_printspaces(int count);
 void mx_clear_list(t_list **list);
 
-int mx_check(int argc, char **argv);
 bool mx_isdir(char *filename, t_list *q);
+bool mx_islink(char *filename, t_list *q);
 bool mx_ishidden(char *filename, t_list *q);
-t_cmd *mx_create_command(int argc, char **argv); // получаешь комманду
+
+int mx_check(int argc, char **argv);
+t_cmd *mx_create_command(int argc, char **argv);
+t_list *mx_get_arg_f(int argc, char **argv, int i);
+t_list *mx_get_arg_d(int argc, char **argv, int i);
+bool mx_strcmp_f_d_bool(void *d1, void *d2);
+t_list *mx_get_files_list_dir(char *dir, t_cmd *c);
 t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c);
-t_list *mx_get_files_list_dir(char *dir, t_cmd *c); // получаешь лист атрибутов содержимого директории
-t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 
 // ---------------------------------------- print functions
+t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
+void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
 void mx_print_long_format(t_list *lf, t_cmd *c);
 void mx_print_std_format(t_list *lf);
-void mx_print_col_format(t_list *lf);
+void mx_print_col_m_format(t_list *lf, char *delim);
 
 // ---------------------------------------- for long print
+void mx_print_total(t_list *lf);
 void mx_print_permissions(t_file *file);
 void mx_print_acl(char *file);
 void mx_print_nlink(t_file *file, t_maxlens_for_print *ml);

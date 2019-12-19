@@ -19,7 +19,7 @@ int mx_check(int argc, char **argv) {
 static int mx_check_flags(int argc, char **argv) {
 	char *ex = ULS_FLAGS;
 	int len_ex = mx_strlen(ex);
-	int i = 1;
+	int i = 1, j;
 
 	for (; i < argc; i++)
 		if (argv[1][0] == '-' && argv[i][0] == '-') {
@@ -34,6 +34,8 @@ static int mx_check_flags(int argc, char **argv) {
 		}
 		else
 			break;
+	for (j = i; i < argc && argv[j][0] == '-' && argv[j][1] != '-'; i++)
+		mx_check_arguments(1, &argv[j], 0);
 	return i;
 }
 
@@ -49,10 +51,11 @@ static void mx_check_arguments(int argc, char **argv, int p) {
     struct stat buff;
 
     for (int i = p; i < argc; i++) {
-        if (lstat(argv[i], &buff) != 0) {
-            print_error_arguments(argv[i]);
-            argv[i] = NULL;
-        }
+    	if (argv[i])
+	        if (lstat(argv[i], &buff) != 0) {
+	            print_error_arguments(argv[i]);
+	            argv[i] = NULL;
+	        }
 	}
 }
 
