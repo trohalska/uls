@@ -1,8 +1,9 @@
 #include "uls.h"
 
 t_list *mx_sort_uls_list(t_list *list, t_cmd *c,
-                        bool (*cmp)(void *a, void *b, t_cmd *c)) {
-    t_list *tmp = NULL, *store = list;
+                         bool (*cmp)(void *a, void *b, t_cmd *c)) {
+    t_list *tmp = NULL;
+    t_list *store = list;
     void *swap_data;
 
     while (list) {
@@ -19,3 +20,4 @@ t_list *mx_sort_uls_list(t_list *list, t_cmd *c,
     }
     return tmp;
 }
+

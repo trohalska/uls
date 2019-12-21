@@ -12,11 +12,10 @@ t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c) {
 	file = malloc(sizeof(t_file));
 	file->filename = mx_strdup(filename);
 	get_path(file, directory);
-    lstat(file->path, &fs);
+	lstat(file->path, &fs);
 	get_owner_group(file, fs, c);
-    file->ffs = fs;
-
-    return file;
+	file->ffs = fs;
+	return file;
 }
 
 static void get_path(t_file *file, char *dir) {

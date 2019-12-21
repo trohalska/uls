@@ -11,11 +11,10 @@ char *mx_human_read_size(off_t st_size) {
     double g;
     int pow = 0;
 
-    if (num == 0) {
-      size = mx_strcpy(size, "  0B");
-    }
+    if (num == 0)
+        size = mx_strcpy(size, "  0B");
     else if (st_size < 1000) {
-      write_number(size, num);
+        write_number(size, num);
         size[3] = 'B';
     }
     else if (st_size >= 1000) {
@@ -40,7 +39,7 @@ char *mx_human_read_size(off_t st_size) {
             size[1] = '.';
             size[2] = num % 10 + 48;
         }
-     add_pref(size, pow);
+    add_pref(size, pow);
     }
    return size;
 }
@@ -74,29 +73,28 @@ static int round_num(double g) {
     off_t res;
 
     if (((off_t)(g * 10) % 10) >= 5)
-      res = (off_t)(g * 10) /10 + 1;
+        res = (off_t)(g * 10) /10 + 1;
     else
-      res = (off_t)(g * 10) /10;
+        res = (off_t)(g * 10) /10;
     return res;
 }
 
-
 static void add_pref(char *size, int pow) {
-     switch (pow) {
-         case 10:
-             size[3] = 'K';
-             break;
-         case 20:
-             size[3] = 'M';
-             break;
-         case 30:
-             size[3] = 'G';
-             break;
-         case 40:
-             size[3] = 'T';
-             break;
-         case 50:
-             size[3] = 'P';
-             break;
-    }
+    switch (pow) {
+        case 10:
+            size[3] = 'K';
+            break;
+        case 20:
+            size[3] = 'M';
+            break;
+        case 30:
+            size[3] = 'G';
+            break;
+        case 40:
+            size[3] = 'T';
+            break;
+        case 50:
+            size[3] = 'P';
+            break;
+}
 }

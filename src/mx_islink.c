@@ -20,8 +20,4 @@ int mx_islink(char *filename, t_list *q) {
     }
     else
         return 0;
-
-
-
-
 }

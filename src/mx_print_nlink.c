@@ -8,3 +8,4 @@ void mx_print_nlink(t_file *file, t_maxlens_for_print *ml){
     free(tmp);
     mx_printint(file->ffs.st_nlink);
 }
+

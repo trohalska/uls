@@ -31,7 +31,8 @@ void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
 
 static void major_minor(t_file *file) {
     int tmp;
-    char *major, *minor;
+    char *major;
+    char *minor;
 
     major = mx_itoa((file->ffs.st_rdev >> 24) & 0xffffff);
     tmp = (file->ffs.st_rdev & 0xffffff);
@@ -72,3 +73,4 @@ static char *get_minor(int minornum) {
         minor = mx_itoa(minornum);
     return minor;
 }
+

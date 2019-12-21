@@ -1,6 +1,7 @@
 #include "uls.h"
 
 static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
+static void print_ow_gr(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
 
 void mx_print_long_format(t_list *lf, t_cmd *c) {
     t_maxlens_for_print *ml;
@@ -21,14 +22,7 @@ static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     mx_print_acl(file->path);
     mx_print_nlink(file, ml);
     mx_printspaces(1);
-    if (c->print_owner) {
-        mx_printstr(file->owner);
-        mx_printspaces(ml->l_owner - mx_strlen(file->owner) + 2);
-    }
-    if (c->print_group) {
-        mx_printstr(file->group);
-        mx_printspaces(ml->l_group - mx_strlen(file->group));
-    }
+    print_ow_gr(file, ml, c);
     mx_printspaces(2);
     mx_print_size(file, ml, c);
     mx_printspaces(1);
@@ -38,4 +32,15 @@ static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     if (S_ISLNK(file->ffs.st_mode))
         mx_print_linkname(file);
     mx_printstr("\n");
+}
+
+static void print_ow_gr(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
+    if (c->print_owner) {
+        mx_printstr(file->owner);
+        mx_printspaces(ml->l_owner - mx_strlen(file->owner) + 2);
+    }
+    if (c->print_group) {
+        mx_printstr(file->group);
+        mx_printspaces(ml->l_group - mx_strlen(file->group));
+    }
 }

@@ -17,7 +17,7 @@ void mx_clear_filesattr_list(t_list **fl) {
     *fl = NULL;
 }
 
-void mx_clear_filesattr(t_file *file) { // попробовать без маллока
+void mx_clear_filesattr(t_file *file) {
     if (!file)
         return;
     mx_strdel(&file->path);

@@ -1,28 +1,28 @@
 #include "uls.h"
 
-static int mx_check_flags(int argc, char **argv);
+static int check_flags(int argc, char **argv);
 static void print_error_flag(char c, char *ex);
-static void mx_check_arguments(int argc, char **argv, int p);
+static void check_arguments(int argc, char **argv, int p);
 static void print_error_arguments(char *v);
 
 int mx_check(int argc, char **argv) {
-	int position = mx_check_flags(argc, argv);
+	int position = check_flags(argc, argv);
 
 	if (argv[position] && mx_strcmp(argv[position], "--") == 0)
 		position++;
 
 	for (int j = position; j < argc; j++)
 		if (argv[j][0] == '-')
-			mx_check_arguments(1, &argv[j], 0);
+			check_arguments(1, &argv[j], 0);
 
-	mx_check_arguments(argc, argv, position);
+	check_arguments(argc, argv, position);
 	return position;
 }
 
 // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
 
-static int mx_check_flags(int argc, char **argv) {
-	char *ex = "ACRSacfghlmnorstu1";
+static int check_flags(int argc, char **argv) {
+	char *ex = "ACRSacfghlmnortu1";
 	int len_ex = mx_strlen(ex);
 	int i = 1;
 
@@ -50,7 +50,7 @@ static void print_error_flag(char c, char *ex) {
     mx_printerr("] [file ...]\n");
 }
 
-static void mx_check_arguments(int argc, char **argv, int p) {
+static void check_arguments(int argc, char **argv, int p) {
     struct stat buff;
 
     for (int i = p; i < argc; i++) {

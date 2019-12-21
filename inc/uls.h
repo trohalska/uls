@@ -14,14 +14,11 @@
 #include <time.h>
 #include <dirent.h>
 #include <errno.h>
-
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <sys/xattr.h>
 #include <sys/acl.h>
-
-
 
 typedef struct s_uls {
 	void *data;
@@ -48,20 +45,16 @@ typedef struct s_cmd {
 	int print_func;
 	int sort_type;
 	int time_type;
-
 	bool error_null_args; 		// if one of them NULL
 	bool print_recursion;		// -R
 	bool print_reverse;			// -r
-
 	bool print_dots_folder;		// -A
 	bool print_hidden;			// -a
 	bool print_f;				// enable -A, -a disable all sortings, -t, -r
-
 	bool print_owner;			// -g
 	bool print_group;			// -o
 	bool print_owner_group_num;	// -n
 	// bool print_blocks;			// -s
-
 	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
@@ -92,18 +85,32 @@ enum sort_type{
 void mx_printspaces(int count);
 void mx_clear_list(t_list **list);
 
+// ---------------------------------------- check errors
+int mx_check(int argc, char **argv);
+
+// ---------------------------------------- check flags
+t_cmd *mx_create_command(int argc, char **argv);
+void mx_flags(char flag, t_cmd *c);
+
+// ---------------------------------------- get arguments
 bool mx_isdir(char *filename, t_list *q);
 int mx_islink(char *filename, t_list *q);
 // 0 - not link, 1 - link to file, 5 - link to folder
 bool mx_ishidden(char *filename, t_list *q);
-
-int mx_check(int argc, char **argv);
-t_cmd *mx_create_command(int argc, char **argv);
 t_list *mx_get_arg_f(int argc, char **argv, int i, t_cmd *c);
 t_list *mx_get_arg_d(int argc, char **argv, int i, t_cmd *c);
 bool mx_strcmp_f_d_bool(void *d1, void *d2);
 t_list *mx_get_files_list_dir(char *dir, t_cmd *c);
 t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c);
+
+// ---------------------------------------- sort functions
+t_list *mx_sort_uls_list(t_list *list, t_cmd *c,
+						bool (*cmp)(void *a, void *b, t_cmd *c));
+bool mx_strcmp_names(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_size(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_mtime(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_atime(void *d1, void *d2, t_cmd *c);
+bool mx_strcmp_ctime(void *d1, void *d2, t_cmd *c);
 
 // ---------------------------------------- print functions
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
@@ -121,14 +128,6 @@ void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
 char *mx_human_read_size(off_t st_size);
 void mx_print_time(t_file *file, t_cmd *c);
 void mx_print_linkname(t_file *file);
-
-// ---------------------------------------- sort functions
-t_list *mx_sort_uls_list(t_list *list, t_cmd *c, bool (*cmp)(void *a, void *b, t_cmd *c));
-bool mx_strcmp_names(void *d1, void *d2, t_cmd *c);
-bool mx_strcmp_size(void *d1, void *d2, t_cmd *c);
-bool mx_strcmp_mtime(void *d1, void *d2, t_cmd *c);
-bool mx_strcmp_atime(void *d1, void *d2, t_cmd *c);
-bool mx_strcmp_ctime(void *d1, void *d2, t_cmd *c);
 
 // ---------------------------------------- clear leaks
 void mx_clear_filesattr_list(t_list **fl);

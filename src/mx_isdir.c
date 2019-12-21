@@ -12,5 +12,5 @@ bool mx_isdir(char *filename, t_list *q) {
         return (S_ISDIR(fs.st_mode) ? true : false);
     }
     else
-        return false;    
+        return false;
 }

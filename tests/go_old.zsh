@@ -1,6 +1,9 @@
 
 echo --------------------------------------- ERRORS
 
+echo Test: ls -#
+diff <(ls -#) <(./uls -#)
+
 echo Test: ls --
 diff <(ls --) <(./uls --)
 
@@ -13,6 +16,12 @@ diff <(ls -- -l) <(./uls -- -l)
 echo Test: ls -- libmx
 diff <(ls -- libmx) <(./uls -- libmx)
 
+echo Test: ls -- Makefile
+diff <(ls -- Makefile) <(./uls -- Makefile)
+
+echo Test: ls -- xxx Makefile
+diff <(ls -- xxx Makefile) <(./uls -- xxx Makefile)
+
 echo Test: ls -- xxx libmx
 diff <(ls -- xxx libmx) <(./uls -- xxx libmx)
 
@@ -24,8 +33,8 @@ echo --------------------------------------- Without flags
 echo Test: ls
 diff <(ls) <(./uls)
 
-echo Test: ls -C
-diff -q <(ls -C) <(./uls -C)
+#echo Test: ls -C
+#diff -q <(ls -C) <(./uls -C)
 
 echo Test: ls | cat -e
 diff <(ls | cat -e) <(./uls | cat -e)
