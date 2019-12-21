@@ -58,7 +58,7 @@ typedef struct s_cmd {
 	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
-	// bool format_T;				// -T
+	bool format_T;				// -T
 } t_cmd;
 
 enum e_time_type {
@@ -125,7 +125,10 @@ void mx_print_permissions(t_file *file);
 void mx_print_acl(char *file);
 void mx_print_nlink(t_file *file, t_maxlens_for_print *ml);
 void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
-char *mx_human_read_size(off_t st_size);
+void mx_print_tab(int len_name, int maxlencol);
+char *mx_hr_size(off_t st_size);
+int mx_hr_get_pow(off_t st_size);
+void mx_hr_write_number(char *size, off_t st_size);
 void mx_print_time(t_file *file, t_cmd *c);
 void mx_print_linkname(t_file *file);
 

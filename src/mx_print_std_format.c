@@ -15,7 +15,7 @@ void mx_print_std_format(t_list *lf) {
     if (!lf || !names)
         return;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-    cols = win.ws_col / (maxlencol + 8);
+    cols = (win.ws_col / ((8 - (maxlencol % 8)) + maxlencol));
     if (isatty(STDOUT_FILENO))
         print_filesnames(names, count_names, maxlencol, cols);
     else
@@ -50,10 +50,10 @@ static char **get_names(t_list *list, int size) {
     return result;
 }
 
-static void print_filesnames(char **names, int size, int max, int cols) {
+static void print_filesnames(char **names, int size, int maxlencol, int cols) {
     int rows;
 
-    if (!names || !size || !cols || !max)
+    if (!names || !size || !cols || !maxlencol)
         return;
     rows = size / cols;
     if (size % cols)
@@ -61,9 +61,8 @@ static void print_filesnames(char **names, int size, int max, int cols) {
     for (int i = 0; i < rows; i++) {
         for (int j = 0; i + j < size; j += rows) {
             mx_printstr(names[i + j]);
-            if (mx_strlen(names[i + j]) < max)
-                mx_printspaces(max - mx_strlen(names[i + j]));
-                mx_printchar('\t');
+            if (names[i + j + 1] && (i + j + rows < size))
+                mx_print_tab(mx_strlen(names[i + j]), maxlencol);
         }
         mx_printchar('\n');
     }

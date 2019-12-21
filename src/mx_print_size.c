@@ -16,7 +16,7 @@ void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     else {
         if (c->format_h) {
             mx_printspaces(1);
-            tmp = mx_human_read_size(file->ffs.st_size);
+            tmp = mx_hr_size(file->ffs.st_size);
             mx_printstr(tmp);
             free(tmp);
         }

@@ -74,6 +74,9 @@ static void filter_flags(char flag, t_cmd *c) {
 		case 'h':
 			c->format_h = true;
 			break;
+		case 'T':
+			c->format_T = true;
+			break;
 		case 'g':
 			c->print_owner = false;
 			break;

@@ -30,7 +30,7 @@ static void print_files(t_list *f_names, t_list *d_names, t_cmd *c) {
 		mx_clear_filesattr_list(&files_list);
 		if (d_names) {
 			mx_printstr("\n");
-			if (mx_list_size(d_names) == 1) {
+			if (mx_list_size(d_names) == 1 && !c->error_null_args) {
 				mx_printstr(d_names->data);
 				mx_printstr(":\n");
 			}

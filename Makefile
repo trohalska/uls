@@ -12,7 +12,9 @@ SRC = mx_check.c \
 	mx_get_files_list_dir.c \
 	mx_get_filesattr.c \
 	mx_get_lens_for_print.c \
-	mx_human_read_size.c \
+	mx_hr_size.c \
+	mx_hr_get_pow.c \
+	mx_hr_write_number.c \
 	mx_isdir.c \
 	mx_ishiden.c \
 	mx_islink.c \
@@ -25,6 +27,7 @@ SRC = mx_check.c \
 	mx_print_permissions.c \
 	mx_print_size.c \
 	mx_print_std_format.c \
+	mx_print_tab.c \
 	mx_print_time.c \
 	mx_print_total.c \
 	mx_printspaces.c \
@@ -48,7 +51,9 @@ OBJ = mx_check.o \
 	mx_get_files_list_dir.o \
 	mx_get_filesattr.o \
 	mx_get_lens_for_print.o \
-	mx_human_read_size.o \
+	mx_hr_size.o \
+	mx_hr_get_pow.o \
+	mx_hr_write_number.o \
 	mx_isdir.o \
 	mx_ishiden.o \
 	mx_islink.o \
@@ -61,6 +66,7 @@ OBJ = mx_check.o \
 	mx_print_permissions.o \
 	mx_print_size.o \
 	mx_print_std_format.o \
+	mx_print_tab.o \
 	mx_print_time.o \
 	mx_print_total.o \
 	mx_printspaces.o \

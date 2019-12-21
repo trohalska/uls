@@ -20,8 +20,9 @@ static void sort(t_list *lf, t_cmd *c) {
 		else if (c->time_type == time_ctime)
 			mx_sort_uls_list(lf, c, mx_strcmp_ctime);
 	}
-	else if (c->sort_type == sort_size)
+	else if (c->sort_type == sort_size) {
 		mx_sort_uls_list(lf, c, mx_strcmp_size);
+	}
 }
 
 static void print_func(t_list *lf, t_cmd *c) {

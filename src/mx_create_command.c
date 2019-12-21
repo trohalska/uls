@@ -52,5 +52,6 @@ static t_cmd *initiailze_default() {
 	c->print_group = true;				// -o
 	c->print_owner_group_num = false;	// -n
 	c->format_h = false;				// -h
+	c->format_T = false;				// -T
 	return c;
 }
