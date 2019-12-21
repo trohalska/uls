@@ -40,5 +40,3 @@ echo Test: ls xxx libmx -l Makefile
 ls xxx libmx -l Makefile 1> test.txt
 ./uls xxx libmx -l Makefile 1> user.txt
 diff -q test.txt user.txt
-
-rm -rf user.txt test.txt

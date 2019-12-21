@@ -62,7 +62,7 @@ static char *get_minor(int minornum) {
     char *minor;
     char *tmp = NULL;
 
-    if (minornum > 127) {
+    if (minornum > 256) {
         minor = mx_strnew(10);
         mx_strcpy(minor, "0x00000000");
         tmp = mx_nbr_to_hex(minornum);
@@ -73,4 +73,3 @@ static char *get_minor(int minornum) {
         minor = mx_itoa(minornum);
     return minor;
 }
-

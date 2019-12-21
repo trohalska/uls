@@ -66,7 +66,7 @@ echo Test: ls -l libmx
 diff -q <(ls -l libmx) <(./uls -l libmx)
 
 echo Test: ls -l /dev
-diff -q <(ls -l /dev) <(./uls -l /dev)
+diff <(ls -l /dev) <(./uls -l /dev)
 
 echo Test: ls -l /dev/null
 diff -q <(ls -l /dev/null) <(./uls -l /dev/null)

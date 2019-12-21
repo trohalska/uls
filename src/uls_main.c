@@ -14,7 +14,6 @@ int main(int argc, char **argv) {
 
 	if (!f_names && !d_names && !c->error_null_args)
 		mx_push_back(&d_names, ".");
-
 	print_directories(d_names, c);
 
 	// mx_printstr("\n----------------------------------------------------\n");
@@ -29,21 +28,22 @@ static void print_files(t_list *f_names, t_list *d_names, t_cmd *c) {
 			mx_push_back(&files_list, mx_get_filesattr(q->data, ".", c));
 		mx_prepare_list_and_print(files_list, c);
 		mx_clear_filesattr_list(&files_list);
-		// mx_printstr("------------\n");
-		// if (!d_names) mx_printstr("------ddd---\n");
 		if (d_names) {
 			mx_printstr("\n");
-			if (mx_list_size(d_names) == 1 || c->error_null_args) {
+			if (mx_list_size(d_names) == 1) {
 				mx_printstr(d_names->data);
 				mx_printstr(":\n");
 			}
 		}
 	}
-	// mx_printstr("------------\n");
 }
 
 static void print_directories(t_list *d_names, t_cmd *c) {
 	if (d_names) {
+		if (mx_list_size(d_names) == 1 && c->error_null_args) {
+			mx_printstr(d_names->data);
+			mx_printstr(":\n");
+		}
 		for (t_list *q = d_names; q; q = q->next) {
 			if (mx_list_size(d_names) != 1) {
 	            mx_printstr(q->data);
