@@ -1,4 +1,5 @@
 
+
 echo --------------------------------------- ERRORS
 
 echo Test: ls -#
@@ -54,15 +55,6 @@ diff <(ls Makefile) <(./uls Makefile)
 echo Test: ls libmx Makefile
 diff <(ls libmx Makefile) <(./uls libmx Makefile)
 
-echo Test: ls /dev
-diff <(ls /dev) <(./uls /dev)
-
-echo Test: ls /Users
-diff <(ls /Users) <(./uls /Users)
-
-echo Test: ls /usr/bin
-diff <(ls /usr/bin) <(./uls /usr/bin)
-
 echo --------------------------------------- Flag -l
 
 echo Test: ls -l
@@ -88,9 +80,8 @@ diff -q <(ls -l /usr/bin) <(./uls -l /usr/bin)
 
 echo --------------------------------------- links
 
-ln -s /libmx/ link1
+ln -s libmx link1
 ln -s Makefile link2
-cd libmx && rm -rf libmx && cd ..
 
 echo Test: ls -l
 diff -q <(ls -l) <(./uls -l)
@@ -105,7 +96,7 @@ echo Test: ls -l link1
 diff -q <(ls -l link1) <(./uls -l link1)
 
 echo Test: ls -l link2
-diff -q <(ls link1) <(./uls link1)
+diff -q <(ls link2) <(./uls link2)
 
 echo --------------------------------------- Attr @ and ACL +
 
@@ -118,6 +109,9 @@ diff -q <(ls /dev/) <(./uls /dev/)
 
 echo Test: ls /usr/bin
 diff -q <(ls /usr/bin) <(./uls /usr/bin)
+
+echo Test: ls /Users
+diff -q <(ls /Users) <(./uls /Users)
 
 echo Test: ls libmx /Users/ Makefile link1
 diff -q <(ls libmx /Users/ Makefile link1) <(./uls libmx /Users/ Makefile link1)
@@ -134,7 +128,7 @@ echo Test: ls -Rl | cat -e
 diff -q <(ls -Rl | cat -e) <(./uls -Rl | cat -e)
 
 echo Test: ls -Rl libmx inc Makefile link1
-diff -q <(ls -Rl) <(./uls -Rl)
+diff -q <(ls -Rl libmx inc Makefile link1) <(./uls -Rl libmx inc Makefile link1)
 
 echo Test: ls -lR link1
 diff -q <(ls -lR link1) <(./uls -lR link1)
@@ -155,6 +149,15 @@ diff -q <(ls -A) <(./uls -A)
 
 echo Test: ls -f
 diff -q <(ls -f) <(./uls -f)
+
+echo Test: ls -al
+diff -q <(ls -al) <(./uls -al)
+
+echo Test: ls -Al
+diff -q <(ls -Al) <(./uls -Al)
+
+echo Test: ls -fl
+diff -q <(ls -fl) <(./uls -fl)
 
 echo Test: ls -a libmx inc Makefile link1
 diff -q <(ls -a libmx inc Makefile link1) <(./uls -a libmx inc Makefile link1)
@@ -220,23 +223,23 @@ diff -q <(ls -AR libmx) <(./uls -AR libmx)
 
 echo --------------------------------------- flag -G
 
-#echo Test: ls -G
-#diff -q <(ls -G) <(./uls -G)
+echo Test: ls -G
+diff -q <(ls -G) <(./uls -G)
 
-#echo Test: ls -G | cat -e
-#diff -q <(ls -G | cat -e) <(./uls -G | cat -e)
+echo Test: ls -G | cat -e
+diff -q <(ls -G | cat -e) <(./uls -G | cat -e)
 
-#echo Test: ls -Gl
-#diff -q <(ls -Gl) <(./uls -Gl)
+echo Test: ls -Gl
+diff -q <(ls -Gl) <(./uls -Gl)
 
-#echo Test: ls -Gl /dev
-#diff -q <(ls -Gl /dev) <(./uls -Gl /dev)
+echo Test: ls -Gl /dev
+diff -q <(ls -Gl /dev) <(./uls -Gl /dev)
 
-#echo Test: ls -Gl /Users/
-#diff -q <(ls -Gl /Users/) <(./uls -Gl /Users/)
+echo Test: ls -Gl /Users/
+diff -q <(ls -Gl /Users/) <(./uls -Gl /Users/)
 
-#echo Test: ls -Gl /usr/bin
-#diff -q <(ls -Gl /usr/bin) <(./uls -Gl /usr/bin)
+echo Test: ls -Gl /usr/bin
+diff -q <(ls -Gl /usr/bin) <(./uls -Gl /usr/bin)
 
 echo --------------------------------------- flag -lh, -le, -lT, -l@
 
@@ -386,3 +389,5 @@ echo --------------------------------------- memory leeks
 echo add system "leaks -q uls" in main
 
 rm -rf link1 link2
+echo -----------------------------------
+echo PRINT FLAGS m, C, 1 in diff behave not usual like cat -e

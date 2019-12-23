@@ -22,6 +22,7 @@ void mx_print_permissions(t_file *file) {
             ((file->ffs.st_mode & S_ISTXT) ? 't' : 'x') :
             ((file->ffs.st_mode & S_ISTXT) ? 'T' : '-');
     mx_printstr(res);
+    file->perm = mx_strdup(res);
     free(res);
 }
 

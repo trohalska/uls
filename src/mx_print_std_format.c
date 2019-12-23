@@ -19,7 +19,7 @@ void mx_print_std_format(t_list *lf) {
     if (isatty(STDOUT_FILENO))
         print_filesnames(names, count_names, maxlencol, cols);
     else
-        print_fnames_isatty(names, count_names, maxlencol, 2);
+        print_fnames_isatty(names, count_names, maxlencol, cols);
     mx_del_strarr(&names);
 }
 
@@ -79,8 +79,7 @@ static void print_fnames_isatty(char **names, int size, int max, int cols) {
     for (int i = 0; i < size; i += 2) {
         mx_printstr(names[i]);
         if (names[i + 1]) {
-            mx_printspaces(max - mx_strlen(names[i]));
-            mx_printchar('\t');
+            mx_print_tab(mx_strlen(names[i]), max);
             mx_printstr(names[i + 1]);
         }
         mx_printchar('\n');

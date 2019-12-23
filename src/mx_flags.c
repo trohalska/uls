@@ -31,6 +31,9 @@ static void print_flags(char flag, t_cmd *c) {
 		case 'R':
 			c->print_recursion = true;
 			break;
+		case 'G':
+			c->format_G = true;
+			break;
 	}
 }
 

@@ -20,6 +20,25 @@
 #include <sys/xattr.h>
 #include <sys/acl.h>
 
+#define BLK   "\x1B[30m"
+#define RED   "\x1B[31m"
+#define GRN   "\x1B[32m"
+#define YEL   "\x1B[33m"
+#define BLU   "\x1B[34m"
+#define MAG   "\x1B[35m"
+#define CYN   "\x1B[36m"
+#define WHT   "\x1B[37m"
+#define RESET "\x1B[0m"
+#define RED_B "\x1B[1;31m"
+#define RESET_B "\x1B[1;31m"
+#define BLK_F_RED_B "\x1B[0;30;41m"
+#define BLK_F_CYAN_B "\x1B[0;30;46m"
+#define BLOCK "\x1B[0;34;46m"
+#define CHR "\x1B[0;34;43m"
+#define DIR_T "\x1B[0;30;42m"
+
+#define FLAGS "ACGRSTacfghlmnortu1"
+
 typedef struct s_uls {
 	void *data;
     int len;
@@ -32,6 +51,7 @@ typedef struct s_file {
 	struct stat ffs; 	// stat
 	char *owner;
 	char *group;
+	char *perm;
 } t_file;
 
 typedef struct s_maxlens_for_print {
@@ -59,6 +79,7 @@ typedef struct s_cmd {
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
 	bool format_T;				// -T
+	bool format_G;				//G color
 } t_cmd;
 
 enum e_time_type {
@@ -118,6 +139,7 @@ void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
 void mx_print_long_format(t_list *lf, t_cmd *c);
 void mx_print_std_format(t_list *lf);
 void mx_print_col_m_format(t_list *lf, char *delim);
+void mx_print_m_format(t_list *lf);
 
 // ---------------------------------------- for long print
 void mx_print_total(t_list *lf);
@@ -130,6 +152,7 @@ char *mx_hr_size(off_t st_size);
 int mx_hr_get_pow(off_t st_size);
 void mx_hr_write_number(char *size, off_t st_size);
 void mx_print_time(t_file *file, t_cmd *c);
+void mx_print_color_name(t_file *file);
 void mx_print_linkname(t_file *file);
 
 // ---------------------------------------- clear leaks

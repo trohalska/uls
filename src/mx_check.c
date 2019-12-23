@@ -22,7 +22,7 @@ int mx_check(int argc, char **argv) {
 // [-ABCFGHLOPRSTUWabcdefghiklmnopqrstuwx1]
 
 static int check_flags(int argc, char **argv) {
-	char *ex = "ACRSTacfghlmnortu1";
+	char *ex = FLAGS;
 	int len_ex = mx_strlen(ex);
 	int i = 1;
 

@@ -21,8 +21,10 @@ SRC = mx_check.c \
 	mx_prepare_list_and_print.c \
 	mx_print_acl.c \
 	mx_print_col_m_format.c \
+	mx_print_color_name.c \
 	mx_print_linkname.c \
 	mx_print_long_format.c \
+	mx_print_m_format.c \
 	mx_print_nlink.c \
 	mx_print_permissions.c \
 	mx_print_size.c \
@@ -62,6 +64,8 @@ OBJ = mx_check.o \
 	mx_print_col_m_format.o \
 	mx_print_linkname.o \
 	mx_print_long_format.o \
+	mx_print_m_format.o \
+	mx_print_color_name.o \
 	mx_print_nlink.o \
 	mx_print_permissions.o \
 	mx_print_size.o \
