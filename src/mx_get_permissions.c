@@ -2,7 +2,7 @@
 
 static char *get_type(t_file *file, char *res);
 
-void mx_print_permissions(t_file *file) {
+void mx_get_permissions(t_file *file) {
     char *res = mx_strnew(10);
 
     get_type(file, res);
@@ -21,7 +21,6 @@ void mx_print_permissions(t_file *file) {
     res[9] = (file->ffs.st_mode & S_IXOTH) ?
             ((file->ffs.st_mode & S_ISTXT) ? 't' : 'x') :
             ((file->ffs.st_mode & S_ISTXT) ? 'T' : '-');
-    mx_printstr(res);
     file->perm = mx_strdup(res);
     free(res);
 }
@@ -35,4 +34,3 @@ static char *get_type(t_file *file, char *res) {
              S_ISLNK(file->ffs.st_mode) ? 'l' : '-';
     return res;
 }
-

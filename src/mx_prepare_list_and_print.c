@@ -32,9 +32,9 @@ static void print_func(t_list *lf, t_cmd *c) {
 	if (c->print_func == long_format)
 		mx_print_long_format(lf, c);
 	else if (c->print_func == std_format)
-		mx_print_std_format(lf);
+		mx_print_std_format(lf, c);
 	else if (c->print_func == col_format)
-		mx_print_col_m_format(lf, "\n");
+		mx_print_col_format(lf, c);
 	else if (c->print_func == m_format)
-		mx_print_m_format(lf);
+		mx_print_m_format(lf, c);
 }

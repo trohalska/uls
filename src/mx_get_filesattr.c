@@ -13,8 +13,13 @@ t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c) {
 	file->filename = mx_strdup(filename);
 	get_path(file, directory);
 	lstat(file->path, &fs);
-	get_owner_group(file, fs, c);
 	file->ffs = fs;
+	if (c->print_func == long_format) {
+		mx_get_permissions(file);
+		get_owner_group(file, fs, c);
+	}
+	else if (c->format_G)
+		mx_get_permissions(file);
 	return file;
 }
 

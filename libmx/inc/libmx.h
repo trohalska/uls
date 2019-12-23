@@ -28,6 +28,8 @@ void mx_del_arr_matrix_int(int ***arr);
 void mx_del_matrix_int(int **str);
 void mx_printarrint(int *arr, int G);
 
+void mx_printspaces(int count);
+
 //---------------------------------- utils pack - 14
 void mx_printchar(char c);
 void mx_print_unicode(wchar_t c);
@@ -89,7 +91,7 @@ void mx_pop_front(t_list **head);
 void mx_pop_back(t_list **head);
 int mx_list_size(t_list *list);
 t_list *mx_sort_list(t_list *lst, bool (*cmp)(void *, void *));
-
+void mx_clear_list(t_list **list);
 void mx_printlist(t_list *list);
 
 

@@ -1,7 +1,7 @@
 #include "uls.h"
 
 static t_cmd *initiailze_default();
-static void check_if_f_flag(t_cmd *c);
+static void check_if_fG_flag(t_cmd *c);
 
 t_cmd *mx_create_command(int argc, char **argv) {
 	t_cmd *c = initiailze_default();
@@ -21,16 +21,18 @@ t_cmd *mx_create_command(int argc, char **argv) {
 			c->error_null_args = true;
 			break;
 		}
-	check_if_f_flag(c);
+	check_if_fG_flag(c);
 	return c;
 }
 
-static void check_if_f_flag(t_cmd *c) {
+static void check_if_fG_flag(t_cmd *c) {
 	if (c->print_f == true) {
 		c->print_dots_folder = true;
 		c->print_hidden = true;
 		c->sort_type = sort_none;
 	}
+	if (!isatty(STDOUT_FILENO))
+		c->format_G = false;
 }
 
 static t_cmd *initiailze_default() {

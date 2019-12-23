@@ -4,7 +4,6 @@ INC = uls.h
 
 SRC = mx_check.c \
 	mx_clear_filesattr_list.c \
-	mx_clear_list.c \
 	mx_create_command.c \
 	mx_flags.c \
 	mx_get_arg_d.c \
@@ -12,6 +11,7 @@ SRC = mx_check.c \
 	mx_get_files_list_dir.c \
 	mx_get_filesattr.c \
 	mx_get_lens_for_print.c \
+	mx_get_permissions.c \
 	mx_hr_size.c \
 	mx_hr_get_pow.c \
 	mx_hr_write_number.c \
@@ -20,19 +20,17 @@ SRC = mx_check.c \
 	mx_islink.c \
 	mx_prepare_list_and_print.c \
 	mx_print_acl.c \
-	mx_print_col_m_format.c \
+	mx_print_col_format.c \
 	mx_print_color_name.c \
 	mx_print_linkname.c \
 	mx_print_long_format.c \
 	mx_print_m_format.c \
 	mx_print_nlink.c \
-	mx_print_permissions.c \
 	mx_print_size.c \
 	mx_print_std_format.c \
 	mx_print_tab.c \
 	mx_print_time.c \
 	mx_print_total.c \
-	mx_printspaces.c \
 	mx_sort_uls_list.c \
 	mx_strcmp_atime.c \
 	mx_strcmp_ctime.c \
@@ -45,7 +43,6 @@ SRC = mx_check.c \
 
 OBJ = mx_check.o \
 	mx_clear_filesattr_list.o \
-	mx_clear_list.o \
 	mx_create_command.o \
 	mx_flags.o \
 	mx_get_arg_d.o \
@@ -53,6 +50,7 @@ OBJ = mx_check.o \
 	mx_get_files_list_dir.o \
 	mx_get_filesattr.o \
 	mx_get_lens_for_print.o \
+	mx_get_permissions.o \
 	mx_hr_size.o \
 	mx_hr_get_pow.o \
 	mx_hr_write_number.o \
@@ -61,19 +59,17 @@ OBJ = mx_check.o \
 	mx_islink.o \
 	mx_prepare_list_and_print.o \
 	mx_print_acl.o \
-	mx_print_col_m_format.o \
+	mx_print_col_format.o \
 	mx_print_linkname.o \
 	mx_print_long_format.o \
 	mx_print_m_format.o \
 	mx_print_color_name.o \
 	mx_print_nlink.o \
-	mx_print_permissions.o \
 	mx_print_size.o \
 	mx_print_std_format.o \
 	mx_print_tab.o \
 	mx_print_time.o \
 	mx_print_total.o \
-	mx_printspaces.o \
 	mx_sort_uls_list.o \
 	mx_strcmp_atime.o \
 	mx_strcmp_ctime.o \

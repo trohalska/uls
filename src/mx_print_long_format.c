@@ -18,7 +18,7 @@ void mx_print_long_format(t_list *lf, t_cmd *c) {
 static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     if (!file || !ml || !c)
         return;
-    mx_print_permissions(file);
+    mx_printstr(file->perm);
     mx_print_acl(file->path);
     mx_print_nlink(file, ml);
     mx_printspaces(1);
@@ -30,7 +30,7 @@ static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     mx_printspaces(1);
     if (c->format_G)
         mx_print_color_name(file);
-    else 
+    else
         mx_printstr(file->filename);
     if (S_ISLNK(file->ffs.st_mode))
         mx_print_linkname(file);

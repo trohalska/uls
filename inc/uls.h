@@ -102,10 +102,6 @@ enum sort_type{
     sort_time,			/* -t */
 };
 
-// -------------------------------- to mylibmx
-void mx_printspaces(int count);
-void mx_clear_list(t_list **list);
-
 // ---------------------------------------- check errors
 int mx_check(int argc, char **argv);
 
@@ -123,6 +119,7 @@ t_list *mx_get_arg_d(int argc, char **argv, int i, t_cmd *c);
 bool mx_strcmp_f_d_bool(void *d1, void *d2);
 t_list *mx_get_files_list_dir(char *dir, t_cmd *c);
 t_file *mx_get_filesattr(char *filename, char *directory, t_cmd *c);
+void mx_get_permissions(t_file *file);
 
 // ---------------------------------------- sort functions
 t_list *mx_sort_uls_list(t_list *list, t_cmd *c,
@@ -137,13 +134,12 @@ bool mx_strcmp_ctime(void *d1, void *d2, t_cmd *c);
 t_maxlens_for_print *mx_get_lens_for_print(t_list *lf);
 void mx_prepare_list_and_print(t_list *lf, t_cmd *c);
 void mx_print_long_format(t_list *lf, t_cmd *c);
-void mx_print_std_format(t_list *lf);
-void mx_print_col_m_format(t_list *lf, char *delim);
-void mx_print_m_format(t_list *lf);
+void mx_print_std_format(t_list *lf, t_cmd *c);
+void mx_print_col_format(t_list *lf, t_cmd *c);
+void mx_print_m_format(t_list *lf, t_cmd *c);
 
 // ---------------------------------------- for long print
 void mx_print_total(t_list *lf);
-void mx_print_permissions(t_file *file);
 void mx_print_acl(char *file);
 void mx_print_nlink(t_file *file, t_maxlens_for_print *ml);
 void mx_print_size(t_file *file, t_maxlens_for_print *ml, t_cmd *c);
@@ -156,6 +152,6 @@ void mx_print_color_name(t_file *file);
 void mx_print_linkname(t_file *file);
 
 // ---------------------------------------- clear leaks
-void mx_clear_filesattr_list(t_list **fl);
+void mx_clear_filesattr_list(t_list **fl, t_cmd *c);
 
 #endif

@@ -27,7 +27,7 @@ static void print_files(t_list *f_names, t_list *d_names, t_cmd *c) {
 		for (t_list *q = f_names; q; q = q->next)
 			mx_push_back(&files_list, mx_get_filesattr(q->data, ".", c));
 		mx_prepare_list_and_print(files_list, c);
-		mx_clear_filesattr_list(&files_list);
+		mx_clear_filesattr_list(&files_list, c);
 		if (d_names) {
 			mx_printstr("\n");
 			if (mx_list_size(d_names) == 1 && !c->error_null_args) {
@@ -76,5 +76,5 @@ static void print_one_dir(char *dir, t_cmd *c) {
 				print_one_dir(tmp->path, c);
 			}
 		}
-	mx_clear_filesattr_list(&files_list);
+	mx_clear_filesattr_list(&files_list, c);
 }

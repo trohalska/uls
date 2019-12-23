@@ -390,4 +390,4 @@ echo add system "leaks -q uls" in main
 
 rm -rf link1 link2
 echo -----------------------------------
-echo PRINT FLAGS m, C, 1 in diff behave not usual like cat -e
+echo PRINT FLAGS m and C in diff behave not usual like cat -e
