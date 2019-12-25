@@ -36,6 +36,7 @@
 #define BLOCK "\x1B[0;34;46m"
 #define CHR "\x1B[0;34;43m"
 #define DIR_T "\x1B[0;30;42m"
+#define DIR_X "\033[0;30;43m"
 
 #define FLAGS "ACGRSTacfghlmnortu1"
 
@@ -78,8 +79,8 @@ typedef struct s_cmd {
 	bool format_h;				// -h
 	// bool format_at_symbol;		// -@
 	// bool format_e;				// -e
-	bool format_T;				// -T
-	bool format_G;				//G color
+	bool format_t;				// -T
+	bool format_g;				//G color
 } t_cmd;
 
 enum e_time_type {

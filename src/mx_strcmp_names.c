@@ -15,4 +15,3 @@ bool mx_strcmp_names(void *d1, void *d2, t_cmd *c) {
     else
         return false;
 }
-

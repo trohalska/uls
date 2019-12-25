@@ -9,18 +9,18 @@ void mx_get_permissions(t_file *file) {
     res[1] = (S_IRUSR & file->ffs.st_mode) ? 'r' : '-';
     res[2] = (S_IWUSR & file->ffs.st_mode) ? 'w' : '-';
     res[3] = (file->ffs.st_mode & S_IXUSR) ?
-            ((file->ffs.st_mode & S_ISUID) ? 's' : 'x') :
-            ((file->ffs.st_mode & S_ISUID) ? 'S' : '-');
+             ((file->ffs.st_mode & S_ISUID) ? 's' : 'x') :
+             ((file->ffs.st_mode & S_ISUID) ? 'S' : '-');
     res[4] = (S_IRGRP & file->ffs.st_mode) ? 'r' : '-';
     res[5] = (S_IWGRP & file->ffs.st_mode) ? 'w' : '-';
     res[6] = (file->ffs.st_mode & S_IXGRP) ?
-            ((file->ffs.st_mode & S_ISGID) ? 's' : 'x') :
-            ((file->ffs.st_mode & S_ISGID) ? 'S' : '-');
+             ((file->ffs.st_mode & S_ISGID) ? 's' : 'x') :
+             ((file->ffs.st_mode & S_ISGID) ? 'S' : '-');
     res[7] = (S_IROTH & file->ffs.st_mode) ? 'r' : '-';
     res[8] = (S_IWOTH & file->ffs.st_mode) ? 'w' : '-';
     res[9] = (file->ffs.st_mode & S_IXOTH) ?
-            ((file->ffs.st_mode & S_ISTXT) ? 't' : 'x') :
-            ((file->ffs.st_mode & S_ISTXT) ? 'T' : '-');
+             ((file->ffs.st_mode & S_ISTXT) ? 't' : 'x') :
+             ((file->ffs.st_mode & S_ISTXT) ? 'T' : '-');
     file->perm = mx_strdup(res);
     free(res);
 }
@@ -34,3 +34,4 @@ static char *get_type(t_file *file, char *res) {
              S_ISLNK(file->ffs.st_mode) ? 'l' : '-';
     return res;
 }
+

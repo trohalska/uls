@@ -10,3 +10,4 @@ int mx_hr_get_pow(off_t st_size) {
     }
     return pow;
 }
+

@@ -1,11 +1,13 @@
 #include "uls.h"
 
 static char get_separator(int *len, char *name, int win_col);
+static void print (t_file *tmp, t_cmd *c);
 
 void mx_print_m_format(t_list *lf, t_cmd *c) {
     struct winsize win;
     t_file *tmp;
-    int len = 0, i = 0;
+    int len = 0;
+    int i = 0;
 
     if (!lf)
         return;
@@ -16,10 +18,7 @@ void mx_print_m_format(t_list *lf, t_cmd *c) {
             mx_printchar(',');
             mx_printchar(get_separator(&len, tmp->filename, win.ws_col));
         }
-        if (c->format_G)
-            mx_print_color_name(tmp);
-        else
-            mx_printstr(tmp->filename);
+        print(tmp, c);
         len += mx_strlen(tmp->filename);
     }
     mx_printstr("\n");
@@ -37,4 +36,11 @@ static char get_separator(int *len, char *name, int win_col) {
         separator = '\n';
     }
     return separator;
+}
+
+static void print (t_file *tmp, t_cmd *c) {
+    if (c->format_g)
+        mx_print_color_name(tmp);
+    else
+        mx_printstr(tmp->filename);
 }

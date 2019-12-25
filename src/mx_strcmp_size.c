@@ -11,4 +11,3 @@ bool mx_strcmp_size(void *d1, void *d2, t_cmd *c) {
     else
         return false;
 }
-

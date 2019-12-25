@@ -27,8 +27,8 @@ void mx_clear_filesattr(t_file *file, t_cmd *c) {
         mx_strdel(&file->owner);
         mx_strdel(&file->group);
     }
-    else if (c->format_G)
-		mx_strdel(&file->perm);
+    else if (c->format_g)
+        mx_strdel(&file->perm);
     free(file);
     file = NULL;
 }

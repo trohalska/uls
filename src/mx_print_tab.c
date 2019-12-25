@@ -12,4 +12,3 @@ void mx_print_tab(int len_name, int maxlencol) {
     for (int i = 0; i < count; i += 8)
         mx_printchar('\t');
 }
-

@@ -5,20 +5,21 @@ static int count_reverse_tmp(char *tmp, int number);
 char *mx_itoa(int number) {
     char *res = mx_strnew(11);
     int i = 1;
+    char *tmp = mx_strnew(10); // for revers array;
+    int j = count_reverse_tmp(tmp, number);;
+
     if (number == 0)  // for number = 0
         res[0] = '0';
     else if (number < 0) // for number < 0
         res[0] = '-';
     else i = 0;
-    char *tmp = mx_strnew(10); // write revers in array
-    int j = count_reverse_tmp(tmp, number);
     while (j - 1 >= 0) { // write in correct order
         j--;
         res[i] = tmp[j];
         i++;
     }
-    free(tmp);    
-    res[i] = '\0';   
+    free(tmp);
+    res[i] = '\0';
     return res;
 }
 

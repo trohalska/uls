@@ -20,4 +20,3 @@ t_list *mx_sort_uls_list(t_list *list, t_cmd *c,
     }
     return tmp;
 }
-

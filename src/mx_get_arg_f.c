@@ -11,7 +11,8 @@ t_list *mx_get_arg_f(int argc, char **argv, int i, t_cmd *c) {
             && (mx_islink(argv[i], NULL) == 5)
             && c->print_func == long_format)
             mx_push_back(&f_argv, argv[i]);
-    if(!c->print_f)
+    if (!c->print_f)
         mx_sort_list(f_argv, mx_strcmp_f_d_bool);
     return f_argv;
 }
+

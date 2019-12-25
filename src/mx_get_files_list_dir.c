@@ -1,21 +1,21 @@
 #include "uls.h"
 
-static t_list *print_error(char *dir);
+static void print_error(char *dir);
+static bool check(char *dir, DIR *directory);
 
 t_list *mx_get_files_list_dir(char *dir, t_cmd *c) {
     t_list *lf = NULL;
     DIR *directory = opendir(dir);
     struct dirent *entry;
 
-    if(!dir || !c)
+    if (check(dir, directory))
         return NULL;
-    if (!(directory))
-        return print_error(dir);
     while ((entry = readdir(directory))) {
         if(c->print_hidden == true || c->print_f == true)
             mx_push_back(&lf, mx_get_filesattr(entry->d_name, dir, c));
         else if (c->print_dots_folder == true){
-            if (mx_strcmp(entry->d_name, ".") && mx_strcmp(entry->d_name, "..") != 0)
+            if (mx_strcmp(entry->d_name, ".")
+                && mx_strcmp(entry->d_name, "..") != 0)
                 mx_push_back(&lf, mx_get_filesattr(entry->d_name, dir, c));
         }
         else if (entry->d_name[0] != '.')
@@ -25,7 +25,17 @@ t_list *mx_get_files_list_dir(char *dir, t_cmd *c) {
     return lf;
 }
 
-static t_list *print_error(char *dir) {
+static bool check(char *dir, DIR *directory) {
+    if (!dir)
+        return true;
+    if (!(directory)) {
+        print_error(dir);
+        return true;
+    }
+    return false;
+}
+
+static void print_error(char *dir) {
     int i = mx_strlen(dir) - 1;
 
     if (dir[i] == '/')
@@ -36,5 +46,5 @@ static t_list *print_error(char *dir) {
         mx_printerr("uls: ");
         perror(&dir[i + 1]);
     }
-    return NULL;
 }
+

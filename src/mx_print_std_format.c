@@ -3,7 +3,7 @@
 static int get_maxlen_name(t_list *lf);
 static t_file **get_names(t_list *list, int size);
 static void print_f_names(t_file **names, int maxlencol, int win);
-static void print_f_names_G(t_file **names, int maxlencol, int win);
+static void print_f_names_g(t_file **names, int maxlencol, int win);
 
 void mx_print_std_format(t_list *lf, t_cmd *c) {
     int maxlencol = get_maxlen_name(lf);
@@ -14,8 +14,8 @@ void mx_print_std_format(t_list *lf, t_cmd *c) {
     if (!lf || !names)
         return;
     ioctl(STDOUT_FILENO, TIOCGWINSZ, &win);
-    if (c->format_G)
-        print_f_names_G(names, maxlencol, win.ws_col);
+    if (c->format_g)
+        print_f_names_g(names, maxlencol, win.ws_col);
     else
         print_f_names(names, maxlencol, win.ws_col);
     free(names);
@@ -69,10 +69,10 @@ static void print_f_names(t_file **names, int maxlencol, int win) {
     }
 }
 
-static void print_f_names_G(t_file **names, int maxlencol, int win) {
+static void print_f_names_g(t_file **names, int maxlencol, int win) {
     int rows;
     int size;
-    int cols = win / (maxlencol + 1);;
+    int cols = win / (maxlencol + 1);
 
     for (size = 0; names[size]; size++)
     if (!names || !cols || !maxlencol)
@@ -85,7 +85,7 @@ static void print_f_names_G(t_file **names, int maxlencol, int win) {
             mx_print_color_name(names[i + j]);
             if (names[i + j + 1] && (i + j + rows < size))
                 mx_printspaces(maxlencol + 1
-                                - mx_strlen(names[i + j]->filename));
+                               - mx_strlen(names[i + j]->filename));
         }
         mx_printchar('\n');
     }

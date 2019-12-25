@@ -1,7 +1,9 @@
 #include "libmx.h"
 
 t_list *mx_sort_list(t_list *list, bool (*cmp)(void *a, void *b)) {
-    t_list *help = NULL, *store = list, *tmp = list;
+    t_list *help = NULL;
+    t_list *store = list;
+    t_list *tmp = list;
     void *swap_data;
 
     while (list) {

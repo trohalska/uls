@@ -13,4 +13,3 @@ bool mx_strcmp_ctime(void *d1, void *d2, t_cmd *c) {
     else
         return false;
 }
-

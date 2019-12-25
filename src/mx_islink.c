@@ -1,7 +1,7 @@
 #include "uls.h"
 
 int mx_islink(char *filename, t_list *q) {
-	struct stat fs;
+    struct stat fs;
     int size = 0;
     char link[255];
 
@@ -21,3 +21,4 @@ int mx_islink(char *filename, t_list *q) {
     else
         return 0;
 }
+

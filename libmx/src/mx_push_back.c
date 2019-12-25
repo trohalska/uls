@@ -1,11 +1,15 @@
 #include "libmx.h"
 
 void mx_push_back(t_list **list, void *data) {
-    if (!list || !data) return;
-    
-    t_list *tmp = mx_create_node(data); // create new
-    if (!tmp) return;
-    t_list *p = *list;
+    t_list *tmp;
+    t_list *p;
+
+    if (!list || !data)
+        return;
+    tmp = mx_create_node(data); // create new
+    if (!tmp)
+        return;
+    p = *list;
     if (*list == NULL) { // find Null-node
         *list = tmp;
         return;

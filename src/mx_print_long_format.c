@@ -28,7 +28,7 @@ static void print_line(t_file *file, t_maxlens_for_print *ml, t_cmd *c) {
     mx_printspaces(1);
     mx_print_time(file, c);
     mx_printspaces(1);
-    if (c->format_G)
+    if (c->format_g)
         mx_print_color_name(file);
     else
         mx_printstr(file->filename);

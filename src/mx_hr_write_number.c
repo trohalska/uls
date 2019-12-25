@@ -13,3 +13,4 @@ void mx_hr_write_number(char *size, off_t st_size) {
             size[c - 1] = ' ';
     }
 }
+

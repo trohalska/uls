@@ -13,4 +13,3 @@ bool mx_strcmp_f_d_bool(void *d1, void *d2) {
     else
         return false;
 }
-

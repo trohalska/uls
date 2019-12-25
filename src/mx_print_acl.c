@@ -16,3 +16,4 @@ void mx_print_acl(char *file) {
     acl_free(acl);
     mx_printchar(character);
 }
+

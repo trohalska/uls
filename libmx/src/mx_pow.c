@@ -2,6 +2,7 @@
 
 double mx_pow(double n, unsigned int pow) {
     double p = n;
+
     if (n == 0) {
         return 0;
     }

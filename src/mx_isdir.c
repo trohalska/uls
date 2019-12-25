@@ -14,3 +14,4 @@ bool mx_isdir(char *filename, t_list *q) {
     else
         return false;
 }
+

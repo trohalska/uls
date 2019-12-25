@@ -3,6 +3,7 @@
 void mx_printint(int n) {
     char s[10];
     int i = 0;
+
     if (n == 0)
         mx_printchar('0');
     if (n < 0)
@@ -19,5 +20,5 @@ void mx_printint(int n) {
     while (i >= 0) {
         mx_printchar(s[i]);
         i--;
-    }    
+    }
 }

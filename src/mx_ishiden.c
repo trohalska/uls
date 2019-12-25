@@ -8,3 +8,4 @@ bool mx_ishidden(char *filename, t_list *q) {
     else
         return false;
 }
+
