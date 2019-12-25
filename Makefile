@@ -1,161 +1,103 @@
-NAMEA = libmx.a
+NAME = uls
 
-INC = libmx.h
+INC = uls.h
 
-SRC = mx_atoi.c \
-mx_binary_search.c \
-mx_bubble_sort.c \
-mx_clear_list.c \
-mx_cmp.c \
-mx_count_substr.c \
-mx_count_words.c \
-mx_count_words_isspace.c \
-mx_create_node.c \
-mx_del_extra_spaces.c \
-mx_del_strarr.c \
-mx_file_to_str.c \
-mx_foreach.c \
-mx_get_char_index.c \
-mx_get_substr_index.c \
-mx_hex_to_nbr.c \
-mx_isalpha.c \
-mx_isdigit.c \
-mx_isspace.c \
-mx_itoa.c \
-mx_list_size.c \
-mx_memccpy.c \
-mx_memchr.c \
-mx_memcmp.c \
-mx_memcpy.c \
-mx_memmem.c \
-mx_memmove.c \
-mx_memrchr.c \
-mx_memset.c \
-mx_nbr_to_hex.c \
-mx_pop_back.c \
-mx_pop_front.c \
-mx_pow.c \
-mx_print_strarr.c \
-mx_print_unicode.c \
-mx_printchar.c \
-mx_printerr.c \
-mx_printint.c \
-mx_printlist.c \
-mx_printspaces.c \
-mx_printstr.c \
-mx_push_back.c \
-mx_push_front.c \
-mx_quicksort.c \
-mx_realloc.c \
-mx_replace_substr.c \
-mx_sort_list.c \
-mx_sqrt.c \
-mx_str_reverse.c \
-mx_strcat.c \
-mx_strcmp.c \
-mx_strcpy.c \
-mx_strdel.c \
-mx_strdup.c \
-mx_strjoin.c \
-mx_strlen.c \
-mx_strncmp.c \
-mx_strncpy.c \
-mx_strndup.c \
-mx_strnew.c \
-mx_strsplit.c \
-mx_strstr.c \
-mx_strtrim.c \
-mx_swap_char.c \
-mx_create_matrix.c \
-mx_del_arr_matrix_int.c \
-mx_del_matrix_int.c \
-mx_printarrint.c
+SRC = mx_check.c \
+	mx_clear_filesattr_list.c \
+	mx_create_command.c \
+	mx_flags.c \
+	mx_get_arg_d.c \
+	mx_get_arg_f.c \
+	mx_get_files_list_dir.c \
+	mx_get_filesattr.c \
+	mx_get_lens_for_print.c \
+	mx_get_permissions.c \
+	mx_hr_size.c \
+	mx_hr_get_pow.c \
+	mx_hr_write_number.c \
+	mx_isdir.c \
+	mx_ishiden.c \
+	mx_islink.c \
+	mx_prepare_list_and_print.c \
+	mx_print_acl.c \
+	mx_print_col_format.c \
+	mx_print_color_name.c \
+	mx_print_linkname.c \
+	mx_print_long_format.c \
+	mx_print_m_format.c \
+	mx_print_nlink.c \
+	mx_print_size.c \
+	mx_print_std_format.c \
+	mx_print_tab.c \
+	mx_print_time.c \
+	mx_print_total.c \
+	mx_sort_uls_list.c \
+	mx_strcmp_atime.c \
+	mx_strcmp_ctime.c \
+	mx_strcmp_f_d_bool.c \
+	mx_strcmp_mtime.c \
+	mx_strcmp_names.c \
+	mx_strcmp_size.c \
+	uls_main.c
 
-OBJ = mx_atoi.o \
-mx_binary_search.o \
-mx_bubble_sort.o \
-mx_clear_list.o \
-mx_cmp.o \
-mx_count_substr.o \
-mx_count_words.o \
-mx_count_words_isspace.o \
-mx_create_node.o \
-mx_del_extra_spaces.o \
-mx_del_strarr.o \
-mx_file_to_str.o \
-mx_foreach.o \
-mx_get_char_index.o \
-mx_get_substr_index.o \
-mx_hex_to_nbr.o \
-mx_isalpha.o \
-mx_isdigit.o \
-mx_isspace.o \
-mx_itoa.o \
-mx_list_size.o \
-mx_memccpy.o \
-mx_memchr.o \
-mx_memcmp.o \
-mx_memcpy.o \
-mx_memmem.o \
-mx_memmove.o \
-mx_memrchr.o \
-mx_memset.o \
-mx_nbr_to_hex.o \
-mx_pop_back.o \
-mx_pop_front.o \
-mx_pow.o \
-mx_print_strarr.o \
-mx_print_unicode.o \
-mx_printchar.o \
-mx_printerr.o \
-mx_printint.o \
-mx_printlist.o \
-mx_printspaces.o \
-mx_printstr.o \
-mx_push_back.o \
-mx_push_front.o \
-mx_quicksort.o \
-mx_realloc.o \
-mx_replace_substr.o \
-mx_sort_list.o \
-mx_sqrt.o \
-mx_str_reverse.o \
-mx_strcat.o \
-mx_strcmp.o \
-mx_strcpy.o \
-mx_strdel.o \
-mx_strdup.o \
-mx_strjoin.o \
-mx_strlen.o \
-mx_strncmp.o \
-mx_strncpy.o \
-mx_strndup.o \
-mx_strnew.o \
-mx_strsplit.o \
-mx_strstr.o \
-mx_strtrim.o \
-mx_swap_char.o \
-mx_create_matrix.o \
-mx_del_arr_matrix_int.o \
-mx_del_matrix_int.o \
-mx_printarrint.o
+
+OBJ = mx_check.o \
+	mx_clear_filesattr_list.o \
+	mx_create_command.o \
+	mx_flags.o \
+	mx_get_arg_d.o \
+	mx_get_arg_f.o \
+	mx_get_files_list_dir.o \
+	mx_get_filesattr.o \
+	mx_get_lens_for_print.o \
+	mx_get_permissions.o \
+	mx_hr_size.o \
+	mx_hr_get_pow.o \
+	mx_hr_write_number.o \
+	mx_isdir.o \
+	mx_ishiden.o \
+	mx_islink.o \
+	mx_prepare_list_and_print.o \
+	mx_print_acl.o \
+	mx_print_col_format.o \
+	mx_print_linkname.o \
+	mx_print_long_format.o \
+	mx_print_m_format.o \
+	mx_print_color_name.o \
+	mx_print_nlink.o \
+	mx_print_size.o \
+	mx_print_std_format.o \
+	mx_print_tab.o \
+	mx_print_time.o \
+	mx_print_total.o \
+	mx_sort_uls_list.o \
+	mx_strcmp_atime.o \
+	mx_strcmp_ctime.o \
+	mx_strcmp_f_d_bool.o \
+	mx_strcmp_mtime.o \
+	mx_strcmp_names.o \
+	mx_strcmp_size.o \
+	uls_main.o
 
 CFLAGS = -std=c11 -Wall -Wextra -Werror -Wpedantic
 
 all: install clean
 
 install:
+	#@make install -sC libmx
 	@cp $(addprefix src/, $(SRC)) .
 	@cp $(addprefix inc/, $(INC)) .
-	@clang $(CFLAGS) -c $(SRC)
-	@ar rcs $(NAMEA) $(OBJ)
-	@mkdir obj
+	@clang $(CFLAGS) -c $(SRC) -I $(INC)
+	@clang $(CFLAGS) libmx/libmx.a $(OBJ) -o $(NAME)
+	@mkdir -p obj
 	@mv $(OBJ) ./obj
 
 uninstall: clean
-	@rm -rf $(NAMEA)
+	#@make uninstall -sC libmx
+	@rm -rf $(NAME)
 
 clean:
+	#@make clean -sC libmx
 	@rm -rf $(INC) $(SRC) ./obj
 
 reinstall: uninstall install
