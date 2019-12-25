@@ -57,6 +57,12 @@ diff <(ls libmx Makefile) <(./uls libmx Makefile)
 
 echo --------------------------------------- Flag -l
 
+#echo Test: ls -lR /
+#diff <(ls -lR /) <(./uls -lR /)
+
+echo Test: ls -l /
+diff -q <(ls -l /) <(./uls -l /)
+
 echo Test: ls -l
 diff -q <(ls -l) <(./uls -l)
 
